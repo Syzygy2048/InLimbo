@@ -1,3 +1,9 @@
+
+# Visual Studio C++
+debug/
+*.opensdf
+*.sdf
+
 # Compiled Object files
 *.slo
 *.lo
