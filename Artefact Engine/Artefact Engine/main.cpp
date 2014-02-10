@@ -24,7 +24,6 @@ int main(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); //openGL context 3.3
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
 
-
 	window = glfwCreateWindow(resX, resY, WINDOW_TITLE, nullptr, nullptr);
 
 	if (!window){

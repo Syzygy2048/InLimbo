@@ -3,7 +3,7 @@
 #include <iostream>
 #include <time.h>
 
-MazeGenerator::MazeGenerator(const int size) :  mazeSize(size)
+MazeGenerator::MazeGenerator(const int size) : mazeSize(size)
 {
 }
 
@@ -18,11 +18,19 @@ char* MazeGenerator::generate()
 	srand(time(NULL));
 	initializeMaze();
 	initializeDigger();
-	
 	do{
-		choseDirection();
-		advanceDigger();
-	}while (startPos.xPos != digger.position.xPos && startPos.yPos != digger.position.yPos)
+		if(digger.position.unvisitedEast || digger.position.unvisitedNorth || digger.position.unvisitedSouth || digger.position.unvisitedWest)
+		{
+			do{
+				digger.choseDirection();
+			} while (!digger.dig(maze, mazeSize) && (digger.position.unvisitedEast || digger.position.unvisitedNorth || digger.position.unvisitedSouth || digger.position.unvisitedWest));
+		}
+		if (!(digger.position.unvisitedEast || digger.position.unvisitedNorth || digger.position.unvisitedSouth || digger.position.unvisitedWest))
+		{
+			digger.position = digger.backTrackStack.top(); //would be peek in other languages
+			digger.backTrackStack.pop();				//would return the popped element in other languages but does not.
+		}
+	} while (!(startPos.xPos == digger.position.xPos && startPos.yPos == digger.position.yPos));
 
 	for (int i = 0; i < mazeSize; i++)
 	{
@@ -80,43 +88,79 @@ void MazeGenerator::initializeDigger()
 
 
 //tries to dig into the 
-void MazeGenerator::Digger::dig(char* maze, const int mazeSize, Position newPosition)
+bool MazeGenerator::Digger::dig(char* maze, const int mazeSize)
 {	
-	if (!(newPosition.xPos > 0 && newPosition.xPos < mazeSize && newPosition.yPos > 0 && newPosition.xPos < mazeSize) //check if new position is out of bounds
-		&& maze[newPosition.xPos + 1 + newPosition.yPos * mazeSize] == MAZE_HALLWAY
+	MazeGenerator::Position newPosition;
+	newPosition.xPos = position.xPos + facing.xDir;
+	newPosition.yPos = position.yPos + facing.yDir;
+
+	if ((newPosition.xPos < 1 || newPosition.xPos > mazeSize - 1 || newPosition.yPos < 1 || newPosition.yPos > mazeSize - 1) //check if new position is out of bounds
+		|| (maze[newPosition.xPos + 1 + newPosition.yPos * mazeSize] == MAZE_HALLWAY
 		|| maze[newPosition.xPos - 1 + newPosition.yPos * mazeSize] == MAZE_HALLWAY
-		|| maze[newPosition.xPos + newPosition.yPos + 1 * mazeSize] == MAZE_HALLWAY
-		|| maze[newPosition.xPos + newPosition.yPos - 1 * mazeSize] == MAZE_HALLWAY) //or already visited
+		|| maze[newPosition.xPos + (newPosition.yPos + 1) * mazeSize] == MAZE_HALLWAY
+		|| maze[newPosition.xPos + (newPosition.yPos - 1) * mazeSize] == MAZE_HALLWAY)) //or already visited
 		 
 	{
-		if (position.xPos - newPosition.xPos == -1) position.unvisitedWest = false;
-		else if (position.xPos - newPosition.xPos == 1) position.unvisitedEast = false;
-		else if (position.yPos - newPosition.yPos == -1) position.unvisitedNorth = false;
-		else if (position.yPos - newPosition.yPos == 1) position.unvisitedSouth = false;
+		if (facing.xDir > 0) position.unvisitedWest = false;
+		else if (facing.xDir < 0) position.unvisitedEast = false;
+		else if (facing.yDir > 0) position.unvisitedSouth = false;
+		else if (facing.yDir < 0) position.unvisitedNorth = false;
+		return false;
 	}
 	else    //put old position in stack for backtracking, removes the wall between the old and new position and sets the new position as the current position
 	{
 		if (position.xPos - newPosition.xPos < 0)
 		{ 
-			newPosition.unvisitedEast = false;
+			newPosition.unvisitedWest = false;
 			maze[newPosition.xPos - 1 + newPosition.yPos * mazeSize] = MAZE_HALLWAY;
 		}
 		else if (position.xPos - newPosition.xPos > 0)
 		{
-			newPosition.unvisitedWest = false;
+			newPosition.unvisitedEast = false;
 			maze[newPosition.xPos + 1 + newPosition.yPos * mazeSize] = MAZE_HALLWAY;
 		}
 		else if (position.yPos - newPosition.yPos < 0)
 		{
-			newPosition.unvisitedSouth = false;
-			maze[newPosition.xPos + newPosition.yPos - 1  * mazeSize] = MAZE_HALLWAY;
+			newPosition.unvisitedNorth = false;
+			maze[newPosition.xPos + (newPosition.yPos - 1)  * mazeSize] = MAZE_HALLWAY;
 		}
 		else if (position.yPos - newPosition.yPos > 0)
 		{
-			newPosition.unvisitedNorth = false;
-			maze[newPosition.xPos + newPosition.yPos + 1  * mazeSize] = MAZE_HALLWAY;
+			newPosition.unvisitedSouth = false;
+			maze[newPosition.xPos + (newPosition.yPos + 1)  * mazeSize] = MAZE_HALLWAY;
 		}
 		backTrackStack.push(position);
 		position = newPosition;
+		return true;
 	}
+}
+
+void MazeGenerator::Digger::choseDirection()
+{
+	int newDir = rand() % 100;
+	if (newDir < 20)
+	{
+		facing.turnLeft();
+	}
+	else if (newDir > 80)
+	{	
+		facing.turnRight();
+	}
+
+}
+
+void MazeGenerator::Direction::turnRight()
+{
+	if (dir == NORTH) turnEast();
+	else if (dir == SOUTH) turnWest();
+	else if (dir == EAST) turnSouth();
+	else if (dir == WEST) turnNorth();
+}
+
+void MazeGenerator::Direction::turnLeft()
+{
+	if (dir == NORTH) turnWest();
+	else if (dir == SOUTH) turnEast();
+	else if (dir == EAST) turnNorth();
+	else if (dir == WEST) turnSouth();
 }

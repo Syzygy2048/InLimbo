@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <stack>
+#include <iostream>
 
 class MazeGenerator
 {
@@ -14,18 +15,6 @@ public:
 	
 	char* generate();
 private:
-	struct Direction
-	{
-		int xDir;
-		int yDir;
-		void turnNorth() { xDir = -1; yDir = 0; }
-		void turnSouth() { xDir = 1; yDir = 0; }
-		void turnWest() { xDir = 0; yDir = -1; }
-		void turnEast() { xDir = 0; yDir = 1; }
-	};
-
-	float chanceForChange = 0.2f; //if you give every direction a certain chance you could generate spirals with something like straight: 0.6, left: 0.3, right: 0.1
-
 	struct Position
 	{
 		int xPos;
@@ -37,15 +26,42 @@ private:
 		bool unvisitedWest = true;
 	};
 
-	struct Digger
+
+	struct Direction
+	{
+		const std::string NORTH = "NORTH";
+		const std::string SOUTH = "SOUTH";
+		const std::string WEST = "WEST";
+		const std::string EAST = "EAST";
+
+		std::string dir;
+		int xDir;
+		int yDir;
+
+		void turnNorth() { xDir = 0; yDir = -2; dir = NORTH; }
+		void turnSouth() { xDir = 0; yDir = 2; dir = SOUTH; }
+		void turnWest() { xDir = -2; yDir = 0; dir = WEST; }
+		void turnEast() { xDir = 2; yDir = 0; dir = EAST; }
+		
+		void turnRight();
+		void turnLeft();
+	};
+
+	typedef struct Digger
 	{
 		Position position;
 		Direction facing;
 		std::stack<Position> backTrackStack;
-		void dig(char* maze, const int mazeSize, Position newPosition);
-	};
+		bool dig(char* maze, const int mazeSize);
+		void choseDirection();
+	} Digger;
+	float chanceForChange = 0.2f; //if you	give every direction a certain chance you could generate spirals with something like straight: 0.6, left: 0.3, right: 0.1
+
+
 
 	Digger digger;
+
+
 	char* maze;
 	const int mazeSize;
 	Position startPos;
