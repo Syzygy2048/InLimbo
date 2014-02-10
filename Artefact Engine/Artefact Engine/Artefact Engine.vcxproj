@@ -70,10 +70,14 @@
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MazeGenerator.cpp" />
+    <ClCompile Include="MazeTile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="MazeGenerator.h" />
+    <ClInclude Include="MazeTile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
