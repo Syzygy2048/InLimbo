@@ -1,7 +1,7 @@
 #include "SceneNode.h"
 
 
-SceneNode::SceneNode()
+SceneNode::SceneNode(NodeType t) : type(t)
 {
 	childNodes = std::vector<SceneNode*>();
 }
@@ -11,18 +11,22 @@ SceneNode::~SceneNode()
 {
 }
 
-void SceneNode::update()
+void SceneNode::update(double dT, InputHandler* input)
 {
 	for (SceneNode* node : childNodes)
 	{
-		node->update();
+		node->update(dT, input);
 	}
 }
 
-void SceneNode::draw()
+void SceneNode::draw(glm::mat4* vp)
 {
 	for (SceneNode* node : childNodes)
 	{
-		node->draw();
+		node->draw(vp);
 	}
+}
+void SceneNode::addNode(SceneNode* node)
+{
+	childNodes.push_back(node);
 }

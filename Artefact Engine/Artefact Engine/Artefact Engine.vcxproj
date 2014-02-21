@@ -68,17 +68,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetLoader.cpp" />
+    <ClCompile Include="SceneGraph\CameraNode.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maze\MazeGenerator.cpp" />
     <ClCompile Include="Maze\MazeTile.cpp" />
-    <ClCompile Include="SceneGraph\ModelNode.cpp" />
+    <ClCompile Include="SceneGraph\MeshNode.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetLoader.h" />
+    <ClInclude Include="SceneGraph\CameraNode.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Maze\MazeGenerator.h" />
     <ClInclude Include="Maze\MazeTile.h" />
-    <ClInclude Include="SceneGraph\ModelNode.h" />
+    <ClInclude Include="SceneGraph\MeshNode.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
