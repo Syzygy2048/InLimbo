@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <GL\glew.h> //openGL extension wrangling, include before glfw and openGL because it's a bit "special".
-#include <GLFW\glfw3.h> //window and periphery handling
+#include <GL\glfw3.h> //window and periphery handling
 #include <gl\GL.h> //opengl
 
 #include "Maze/MazeTile.h"

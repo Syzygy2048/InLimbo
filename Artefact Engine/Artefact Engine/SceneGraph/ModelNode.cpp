@@ -3,6 +3,7 @@
 
 ModelNode::ModelNode()
 {
+	//AssetLoader(path)
 }
 
 

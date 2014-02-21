@@ -2,6 +2,8 @@
 
 #include "SceneNode.h"
 #include <glm\glm.hpp>
+
+
 class ModelNode : SceneNode
 {
 public:
@@ -13,7 +15,7 @@ public:
 	
 
 private:
+	//final std::string path;
 	glm::mat4 mvp;
-
 };
 
