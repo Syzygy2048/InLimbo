@@ -67,21 +67,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameEntity.cpp" />
-    <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="AssetLoader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MazeGenerator.cpp" />
-    <ClCompile Include="MazeTile.cpp" />
-    <ClCompile Include="SceneGraph.cpp" />
-    <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="Maze\MazeGenerator.cpp" />
+    <ClCompile Include="Maze\MazeTile.cpp" />
+    <ClCompile Include="SceneGraph\ModelNode.cpp" />
+    <ClCompile Include="SceneGraph\SceneNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameEntity.h" />
-    <ClInclude Include="InputHandler.h" />
-    <ClInclude Include="MazeGenerator.h" />
-    <ClInclude Include="MazeTile.h" />
-    <ClInclude Include="SceneGraph.h" />
-    <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="AssetLoader.h" />
+    <ClInclude Include="Maze\MazeGenerator.h" />
+    <ClInclude Include="Maze\MazeTile.h" />
+    <ClInclude Include="SceneGraph\ModelNode.h" />
+    <ClInclude Include="SceneGraph\SceneNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

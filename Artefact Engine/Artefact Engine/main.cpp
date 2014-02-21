@@ -4,8 +4,7 @@
 #include <GLFW\glfw3.h> //window and periphery handling
 #include <gl\GL.h> //opengl
 
-#include "InputHandler.h"
-#include "MazeTile.h"
+#include "Maze/MazeTile.h"
 
 //quick and dirty settings
 #define WINDOW_TITLE "In Limbo"
@@ -35,8 +34,6 @@ int main(){
 
 	glewInit();
 		
-	InputHandler input = InputHandler(window);
-	
 	GLuint vertexArrayID;
 	glGenVertexArrays(1, &vertexArrayID);
 	glBindVertexArray(vertexArrayID);
