@@ -51,11 +51,9 @@ int main(){
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
-	
 	MazeTile startTile;
 	//gameloop
 	while (!glfwWindowShouldClose(window)){
-
 
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
