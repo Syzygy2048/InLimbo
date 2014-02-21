@@ -16,12 +16,16 @@ float foV;
 
 int mouse;
 int lastMouse;
+int width;
+int height;
+
+
 
 const float mouseSpeed = 0.005f;
 
-CameraNode::CameraNode() : SceneNode(NodeType::CAMERA)
+CameraNode::CameraNode(int resX, int resY, GLFWwindow* window) : SceneNode(NodeType::CAMERA)
 {
-    rigidExists = false;
+   // bool rigidExists = false;
 	//Initial position - pos. z-achse
 	position = glm::vec3(0.0f, 0.2f, 1.2f);
 	//position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -31,6 +35,9 @@ CameraNode::CameraNode() : SceneNode(NodeType::CAMERA)
 	verAngle = 0.0f;
 	//Initial Field of View
 	initFoV = 25.0f;
+	width = resX;
+	height = resY;
+	window = window;
 
 	foV = 0.0f;
 	mouse = 0;
@@ -41,30 +48,21 @@ CameraNode::CameraNode() : SceneNode(NodeType::CAMERA)
 void CameraNode::update(double dT, InputHandler* input)
 {
      	//Get mouse position
-	int xpos, ypos;
-	glfwGetMousePos(&xpos, &ypos);
+	double xpos, ypos;
+	xpos = input->mPosX;
+	ypos = input->mPosY;
 
-	int width, height;
-	glfwGetWindowSize(&width, &height);
 
 	lastMouse = mouse;
-	mouse = glfwGetMouseWheel();
+	mouse = glfwGetMouseButton();
 
-	if(input.) {
-		horAngle = pi;
-		verAngle = 0.0f;
-		initFoV = 25.0f;
-		glfwSetMouseWheel(0);
-		mouse = 0;
-	}
-	else {
-		//Reset mouse position for next frame
-		glfwSetMousePos(width/2, height/2);
+	
+	//Reset mouse position for next frame
+	glfwSetCursorPos(window, width/2, height/2);
 
-		//Calculate new orientation
-		horAngle += mouseSpeed * float(width/2 - xpos);
-		verAngle += mouseSpeed * float(height/2 - ypos);
-	}
+	//Calculate new orientation
+	horAngle += mouseSpeed * float(width/2 - xpos);
+	verAngle += mouseSpeed * float(height/2 - ypos);
 
 	foV = initFoV - 5 * mouse;
 	if(foV < 5.0f) foV = 5.0f;
@@ -80,9 +78,9 @@ void CameraNode::update(double dT, InputHandler* input)
 	up = glm::cross(right, direction);
 
 	//Position der Kamera, wo die Kamera hinschaut, wo "oben ist"
-	viewMatrix = glm::lookAt(position, position + direction, up);
+	glm::mat4& viewMatrix = glm::lookAt(position, position + direction, up);
 
-	projectionMatrix = glm::perspective(foV, (float)width / (float) height, 0.1f, 200000000.0f);
+	glm::mat4& projectionMatrix = glm::perspective(foV, (float)width / (float) height, 0.1f, 200000000.0f);
 
 }
 void CameraNode::draw()
