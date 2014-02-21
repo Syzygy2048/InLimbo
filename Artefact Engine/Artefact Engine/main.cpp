@@ -63,7 +63,7 @@ int main(){
 	glm::mat4 projection = glm::perspective((float)90, (float)resX / (float)resY, 0.1f, 100000.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
 	glm::mat4 vp;
 	SceneNode sceneGraph(SceneNode::ROOT);
-	CameraNode* camera = new CameraNode();
+	CameraNode* camera = new CameraNode(resX, resY, window);
 	sceneGraph.addNode(camera);
 
 	//gameloop
