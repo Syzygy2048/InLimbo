@@ -67,7 +67,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AssetLoader.cpp" />
+    <ClCompile Include="Asset\AssetLoader.cpp" />
     <ClCompile Include="SceneGraph\CameraNode.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
@@ -77,7 +77,7 @@
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssetLoader.h" />
+    <ClInclude Include="Asset\AssetLoader.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Maze\MazeGenerator.h" />

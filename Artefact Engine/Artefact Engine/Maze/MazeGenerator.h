@@ -9,6 +9,7 @@ class MazeGenerator
 public:
 	static const char MAZE_HALLWAY = '.';
 	static const char MAZE_WALL = '#';
+	static const char MAZE_TOWER = 'T';
 
 	MazeGenerator(const int size);
 	~MazeGenerator();

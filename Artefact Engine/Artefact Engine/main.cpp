@@ -2,7 +2,7 @@
 
 #include <GL\glew.h> //openGL extension wrangling, include before glfw and openGL because it's a bit "special".
 #include <GL\glfw3.h> //window and periphery handling
-#include <gl\GL.h> //opengl
+//#include <gl\GL.h> //opengl
 
 #include <glm\gtc\matrix_transform.hpp>
 
@@ -11,7 +11,7 @@
 #include "SceneGraph\CameraNode.h"
 #include "InputHandler.h"
 
-#include "btBulletDynamicsCommon.h"
+#include "bullet\btBulletDynamicsCommon.h"
 
 //quick and dirty settings
 #define WINDOW_TITLE "In Limbo"
@@ -56,15 +56,16 @@ int main(){
 	btDiscreteDynamicsWorld* dynamicWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 	dynamicWorld->setGravity(btVector3(0, -10, 0));
 	
-	//init scenegraph
-	SceneNode sceneGraph(SceneNode::ROOT);
-
+	
 	//init camera and projection matrix
 	glm::mat4 projection = glm::perspective((float)90, (float)resX / (float)resY, 0.1f, 100000.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
 	glm::mat4 vp;
+
+	//init scenegraph
 	SceneNode sceneGraph(SceneNode::ROOT);
 	CameraNode* camera = new CameraNode(resX, resY, window);
 	sceneGraph.addNode(camera);
+//	sceneGraph.addNode(new MeshNode("Asset//Models//KrakeColl.dae"));
 
 	//gameloop
 	double oldTime = glfwGetTime();

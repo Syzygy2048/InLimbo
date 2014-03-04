@@ -14,8 +14,8 @@ float verAngle;
 float initFoV;
 float foV;
 
-int mouse;
-int lastMouse;
+//int mouse;
+//int lastMouse;
 int width;
 int height;
 
@@ -40,8 +40,6 @@ CameraNode::CameraNode(int resX, int resY, GLFWwindow* window) : SceneNode(NodeT
 	window = window;
 
 	foV = 0.0f;
-	mouse = 0;
-	lastMouse = 0;
 }
 
 
@@ -53,8 +51,8 @@ void CameraNode::update(double dT, InputHandler* input)
 	ypos = input->mPosY;
 
 
-	lastMouse = mouse;
-	mouse = glfwGetMouseButton();
+	
+	
 
 	
 	//Reset mouse position for next frame
@@ -64,7 +62,7 @@ void CameraNode::update(double dT, InputHandler* input)
 	horAngle += mouseSpeed * float(width/2 - xpos);
 	verAngle += mouseSpeed * float(height/2 - ypos);
 
-	foV = initFoV - 5 * mouse;
+	foV = initFoV - 5;// *mouse;
 	if(foV < 5.0f) foV = 5.0f;
 	if(foV > 100.0f) foV = 100.0f;
 
