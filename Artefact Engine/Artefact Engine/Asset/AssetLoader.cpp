@@ -1,4 +1,4 @@
-#include "AssetLoader.h"
+#include <GL\glew.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -8,12 +8,10 @@
 //Hack
 #include <assimp/cimport.h>
 
-#include <GL\glew.h>
-#include <GL\glfw3.h>
 //#include "../Shader.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-
+#include "AssetLoader.h"
 
 /*
 btConvexHullShape* model::modelCollShape = new btConvexHullShape();
@@ -30,7 +28,7 @@ AssetLoader::AssetLoader()
 }
 
 
-void AssetLoader::loadAsset(std::string path, MeshNode* node)
+void AssetLoader::loadAssets(std::string path, MeshNode* node)
 {
 
 

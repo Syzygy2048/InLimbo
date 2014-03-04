@@ -9,9 +9,10 @@
 #include "Maze/MazeTile.h"
 #include "SceneGraph\SceneNode.h"
 #include "SceneGraph\CameraNode.h"
+#include "SceneGraph\MeshNode.h"
 #include "InputHandler.h"
 
-#include "bullet\btBulletDynamicsCommon.h"
+//#include "bullet\btBulletDynamicsCommon.h"
 
 //quick and dirty settings
 #define WINDOW_TITLE "In Limbo"
@@ -48,14 +49,14 @@ int main(){
 
 	
 	//init physics
-	btBroadphaseInterface* broadphase = new btDbvtBroadphase();	//collision entities are organized via an AABB tree
+	/*btBroadphaseInterface* broadphase = new btDbvtBroadphase();	//collision entities are organized via an AABB tree
 	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
 	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
 
 	btDiscreteDynamicsWorld* dynamicWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 	dynamicWorld->setGravity(btVector3(0, -10, 0));
-	
+	*/
 	
 	//init camera and projection matrix
 	glm::mat4 projection = glm::perspective((float)90, (float)resX / (float)resY, 0.1f, 100000.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
@@ -63,14 +64,17 @@ int main(){
 
 	//init scenegraph
 	SceneNode sceneGraph(SceneNode::ROOT);
-	CameraNode* camera = new CameraNode(resX, resY, window);
-	sceneGraph.addNode(camera);
-//	sceneGraph.addNode(new MeshNode("Asset//Models//KrakeColl.dae"));
+	//CameraNode* camera = new CameraNode(resX, resY, window);
+	//sceneGraph.addNode(camera);
+	sceneGraph.addNode(new MeshNode("Asset//Models//KrakeColl.dae"));
 
 	//gameloop
 	double oldTime = glfwGetTime();
 
+	glClearColor(0.8, 0.8, 0.8, 1);
 	while (!glfwWindowShouldClose(window)){
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		switch (glGetError()) {
 		case GL_INVALID_ENUM: std::cerr << "oGl error: GL_INVALID_ENUM" << std::endl; break;
 		case GL_INVALID_VALUE: std::cerr << "oGl error: GL_INVALID_VALUE" << std::endl; break;
@@ -81,7 +85,7 @@ int main(){
 		case GL_STACK_OVERFLOW: std::cerr << "oGl error: GL_STACK_OVERFLOW" << std::endl; break;
 		case GL_NO_ERROR:
 		DEFAULT :
-
+			glClear;
 			double newTime = glfwGetTime();
 			double dT = newTime - oldTime;
 			oldTime = newTime;
@@ -89,8 +93,8 @@ int main(){
 			input.handleInput();
 
 			sceneGraph.update(dT, &input);
-			vp = projection * camera->getViewMatrix();
-			dynamicWorld->stepSimulation(dT, 4, 1./60.);
+		//  vp = projection * camera->getViewMatrix();
+		//	dynamicWorld->stepSimulation(dT, 4, 1./60.);
 			sceneGraph.draw(&vp);
 
 			glfwSwapBuffers(window); //actually renders the frame

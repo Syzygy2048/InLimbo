@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /** @file mesh.h
  *  @brief Declares the data structures in which the imported geometry is 
-	returned by ASSIMP: aiMesh, aiFace and aiBone data structures.
+    returned by ASSIMP: aiMesh, aiFace and aiBone data structures.
  */
 #ifndef INCLUDED_AI_MESH_H
 #define INCLUDED_AI_MESH_H

@@ -1,6 +1,5 @@
 #pragma once
 
-//#include <GL\glew.h>
 #include <iostream>
 #include "../SceneGraph/MeshNode.h"
 
@@ -10,8 +9,8 @@ class AssetLoader
 {
 public:
 	AssetLoader();
-	void loadAsset(std::string path, MeshNode* node);
-	virtual ~AssetLoader();
+	void loadAssets(std::string path, MeshNode* node);
+	~AssetLoader();
 
 private:
 	GLuint vao;
