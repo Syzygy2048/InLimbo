@@ -11,6 +11,8 @@
 #include "SceneGraph\CameraNode.h"
 #include "InputHandler.h"
 
+#include "btBulletDynamicsCommon.h"
+
 //quick and dirty settings
 #define WINDOW_TITLE "In Limbo"
 #define resX 1280
@@ -40,26 +42,24 @@ int main(){
 	glewInit();
 	glGetError();		//glew is buggy and throws an openGL error no matter what, this handlies that error by ignoring it.
 
-	GLuint vertexArrayID;
-	glGenVertexArrays(1, &vertexArrayID);
-	glBindVertexArray(vertexArrayID);
-
-	static const GLfloat vertexData[] = { -1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f
-	};
-
-	GLuint vertexBufferID;
-	glGenBuffers(1, &vertexBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-
 	MazeTile startTile;
-
-	
 
 	InputHandler input(window);
 
+	
+	//init physics
+	btBroadphaseInterface* broadphase = new btDbvtBroadphase();	//collision entities are organized via an AABB tree
+	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
+
+	btDiscreteDynamicsWorld* dynamicWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+	dynamicWorld->setGravity(btVector3(0, -10, 0));
+	
+	//init scenegraph
+	SceneNode sceneGraph(SceneNode::ROOT);
+
+	//init camera and projection matrix
 	glm::mat4 projection = glm::perspective((float)90, (float)resX / (float)resY, 0.1f, 100000.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
 	glm::mat4 vp;
 	SceneNode sceneGraph(SceneNode::ROOT);
@@ -71,13 +71,13 @@ int main(){
 
 	while (!glfwWindowShouldClose(window)){
 		switch (glGetError()) {
-		case GL_INVALID_ENUM: std::cerr << "ogl error: GL_INVALID_ENUM" << std::endl; break;
-		case GL_INVALID_VALUE: std::cerr << "ogl error: GL_INVALID_VALUE" << std::endl; break;
-		case GL_INVALID_OPERATION: std::cerr << "ogl error: GL_INVALID_OPERATION" << std::endl; break;
-		case GL_INVALID_FRAMEBUFFER_OPERATION: std::cerr << "ogl error: GL_INVALID_FRAMEBUFFER_OPERATION" << std::endl; break;
-		case GL_OUT_OF_MEMORY: std::cerr << "ogl error: GL_OUT_OF_MEMORY" << std::endl; break;
-		case GL_STACK_UNDERFLOW: std::cerr << "ogl error: GL_STACK_UNDERFLOW" << std::endl; break;
-		case GL_STACK_OVERFLOW: std::cerr << "ogl error: GL_STACK_OVERFLOW" << std::endl; break;
+		case GL_INVALID_ENUM: std::cerr << "oGl error: GL_INVALID_ENUM" << std::endl; break;
+		case GL_INVALID_VALUE: std::cerr << "oGl error: GL_INVALID_VALUE" << std::endl; break;
+		case GL_INVALID_OPERATION: std::cerr << "oGl error: GL_INVALID_OPERATION" << std::endl; break;
+		case GL_INVALID_FRAMEBUFFER_OPERATION: std::cerr << "oGl error: GL_INVALID_FRAMEBUFFER_OPERATION" << std::endl; break;
+		case GL_OUT_OF_MEMORY: std::cerr << "oGl error: GL_OUT_OF_MEMORY" << std::endl; break;
+		case GL_STACK_UNDERFLOW: std::cerr << "oGl error: GL_STACK_UNDERFLOW" << std::endl; break;
+		case GL_STACK_OVERFLOW: std::cerr << "oGl error: GL_STACK_OVERFLOW" << std::endl; break;
 		case GL_NO_ERROR:
 		DEFAULT :
 
@@ -85,25 +85,12 @@ int main(){
 			double dT = newTime - oldTime;
 			oldTime = newTime;
 
+			input.handleInput();
+
 			sceneGraph.update(dT, &input);
 			vp = projection * camera->getViewMatrix();
+			dynamicWorld->stepSimulation(dT, 4, 1./60.);
 			sceneGraph.draw(&vp);
-
-			glEnableVertexAttribArray(0);
-			glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-			glVertexAttribPointer(
-				0,
-				3,
-				GL_FLOAT,
-				GL_FALSE,
-				0,
-				(void*)0
-				);
-
-			glDrawArrays(GL_TRIANGLES, 0, 3);
-
-			glDisableVertexAttribArray(0);
-
 
 			glfwSwapBuffers(window); //actually renders the frame
 			glfwPollEvents();
