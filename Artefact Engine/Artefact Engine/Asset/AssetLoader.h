@@ -1,29 +1,29 @@
 #pragma once
 
-#include <GL\glew.h>
 #include <iostream>
+#include "../SceneGraph/MeshNode.h"
+
 //#include "Shader"
 
-	class AssetLoader
-	{
+class AssetLoader
+{
+public:
+	AssetLoader();
+	void loadAssets(std::string path, MeshNode* node);
+	~AssetLoader();
 
-		public:
-			AssetLoader();
-			GLuint loadAsset(std::string path);
-			virtual ~AssetLoader();
+private:
+	GLuint vao;
+	GLuint positionBuffer, normalBuffer, faceBuffer, uvBuffer, weightBuffer, indexBuffer;
+	//Shader* shader;
+	
+	//Lightning
+	GLuint diffuseBuffer, ambientBuffer ,specularBuffer, emissionBuffer, shininessBuffer;
 
-		private:
-			GLuint vao;
-			GLuint positionBuffer, normalBuffer, faceBuffer, uvBuffer, weightBuffer, indexBuffer;
-			//Shader* shader;
-			
-			//Lightning
-			GLuint diffuseBuffer, ambientBuffer ,specularBuffer, emissionBuffer, shininessBuffer;
+	//Animation
+	/*BoneStructure* bStruct;
+	const aiScene* aScene;
+	const struct aiMesh* mesh;*/
 
-			//Animation
-			/*BoneStructure* bStruct;
-			const aiScene* aScene;
-			const struct aiMesh* mesh;*/
-
-	};
+};
 
