@@ -33,6 +33,7 @@ private:
 	GLuint nbo; //normals
 	GLuint uvbo; //UV coordinates
 	GLuint wbo; //weights
+	GLuint cbo; //color
 	
 	GLuint shaderProgram;
 

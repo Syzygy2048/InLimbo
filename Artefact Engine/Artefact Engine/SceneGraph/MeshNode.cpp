@@ -10,8 +10,6 @@ MeshNode::MeshNode(std::string path) : SceneNode(NodeType::MESH), path(path)
 	shaders.push_back("Shaders//Fragment//simple_fragment_shader.glsl");
 	shaderProgram = ShaderLoader().loadShaderArray(shaders);
 	
-	
-
 	static const GLfloat g_vertex_buffer_data[] = {
 		-1.0f, -1.0f, -1.0f, // triangle 1 : begin
 		-1.0f, -1.0f, 1.0f,
@@ -105,12 +103,10 @@ MeshNode::MeshNode(std::string path) : SceneNode(NodeType::MESH), path(path)
 		GL_FALSE,           // normalized?
 		0,                  // stride
 		(void*)0            // array buffer offset
-		);
-	//glDisableVertexAttribArray(0);
+	);
 
-
-	glGenBuffers(1, &wbo);
-	glBindBuffer(GL_ARRAY_BUFFER, wbo);
+	glGenBuffers(1, &cbo);
+	glBindBuffer(GL_ARRAY_BUFFER, cbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 	
 	glEnableVertexAttribArray(1);
@@ -121,13 +117,8 @@ MeshNode::MeshNode(std::string path) : SceneNode(NodeType::MESH), path(path)
 		GL_FALSE,           // normalized?
 		0,                  // stride
 		(void*)0            // array buffer offset
-		);
-
-
-	//glDisableVertexAttribArray(1);
-
-
-
+	);
+	
 	glBindVertexArray(0);
 
 	mvpLocation = glGetUniformLocation(shaderProgram, "MVP");		//identify data location on shader

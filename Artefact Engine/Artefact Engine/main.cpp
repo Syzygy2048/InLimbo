@@ -74,7 +74,8 @@ int main(){
 	double oldTime = glfwGetTime();
  
 	
-
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 	glClearColor(0.5, 0.5, 0.5, 0.5);
 
 	while (!glfwWindowShouldClose(window)){
