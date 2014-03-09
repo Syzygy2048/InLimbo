@@ -1,4 +1,5 @@
 #include "SceneNode.h"
+#include "MeshNode.h"
 
 
 SceneNode::SceneNode(NodeType t) : type(t)
@@ -19,13 +20,14 @@ void SceneNode::update(double dT, InputHandler* input)
 	}
 }
 
-void SceneNode::draw(glm::mat4* vp)
+void SceneNode::draw(glm::mat4 vp)
 {
 	for (SceneNode* node : childNodes)
 	{
 		node->draw(vp);
 	}
 }
+
 void SceneNode::addNode(SceneNode* node)
 {
 	childNodes.push_back(node);

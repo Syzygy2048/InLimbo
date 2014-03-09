@@ -1,15 +1,16 @@
-#include <iostream>
-
 #include <GL\glew.h> //openGL extension wrangling, include before glfw and openGL because it's a bit "special".
 #include <GL\glfw3.h> //window and periphery handling
-//#include <gl\GL.h> //opengl
+#include <gl\GL.h> //opengl
 
 #include <glm\gtc\matrix_transform.hpp>
 
+#include <iostream>
+
 #include "Maze/MazeTile.h"
 #include "SceneGraph\SceneNode.h"
-#include "SceneGraph\CameraNode.h"
 #include "SceneGraph\MeshNode.h"
+#include "SceneGraph\CameraNode.h"
+
 #include "InputHandler.h"
 
 //#include "bullet\btBulletDynamicsCommon.h"
@@ -32,6 +33,7 @@ int main(){
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
 
 	window = glfwCreateWindow(resX, resY, WINDOW_TITLE, nullptr, nullptr);
+	glewExperimental = true; //required to get the core profile to work.
 
 	if (!window){
 		glfwTerminate();
@@ -43,7 +45,7 @@ int main(){
 	glewInit();
 	glGetError();		//glew is buggy and throws an openGL error no matter what, this handlies that error by ignoring it.
 
-	MazeTile startTile;
+	//MazeTile startTile;
 
 	InputHandler input(window);
 
@@ -59,21 +61,24 @@ int main(){
 	*/
 	
 	//init camera and projection matrix
-	glm::mat4 projection = glm::perspective((float)90, (float)resX / (float)resY, 0.1f, 100000.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
+	glm::mat4 projection = glm::perspective((float)90, (float)resX / (float)resY, 0.1f, 100.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
 	glm::mat4 vp;
 
 	//init scenegraph
 	SceneNode sceneGraph(SceneNode::ROOT);
-	//CameraNode* camera = new CameraNode(resX, resY, window);
-	//sceneGraph.addNode(camera);
-	sceneGraph.addNode(new MeshNode("Asset//Models//KrakeColl.dae"));
+	CameraNode* camera = new CameraNode();
+	sceneGraph.addNode(camera);
+	sceneGraph.addNode(new MeshNode("Asset//Models//duck.dae"));
 
 	//gameloop
 	double oldTime = glfwGetTime();
+ 
+	
 
-	glClearColor(0.8, 0.8, 0.8, 1);
+	glClearColor(0.5, 0.5, 0.5, 0.5);
+
 	while (!glfwWindowShouldClose(window)){
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
 
 		switch (glGetError()) {
 		case GL_INVALID_ENUM: std::cerr << "oGl error: GL_INVALID_ENUM" << std::endl; break;
@@ -85,7 +90,8 @@ int main(){
 		case GL_STACK_OVERFLOW: std::cerr << "oGl error: GL_STACK_OVERFLOW" << std::endl; break;
 		case GL_NO_ERROR:
 		DEFAULT :
-			glClear;
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			
 			double newTime = glfwGetTime();
 			double dT = newTime - oldTime;
 			oldTime = newTime;
@@ -93,9 +99,11 @@ int main(){
 			input.handleInput();
 
 			sceneGraph.update(dT, &input);
-		//  vp = projection * camera->getViewMatrix();
-		//	dynamicWorld->stepSimulation(dT, 4, 1./60.);
-			sceneGraph.draw(&vp);
+		    //	dynamicWorld->stepSimulation(dT, 4, 1./60.);
+			sceneGraph.draw(projection * camera->getViewMatrix());
+
+		
+			
 
 			glfwSwapBuffers(window); //actually renders the frame
 			glfwPollEvents();

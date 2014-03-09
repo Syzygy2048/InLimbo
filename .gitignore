@@ -1,6 +1,7 @@
 
 # Visual Studio C++
 debug/
+release/
 *.opensdf
 *.sdf
 *.suo

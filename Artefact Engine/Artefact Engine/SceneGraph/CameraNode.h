@@ -1,22 +1,19 @@
 #pragma once
 
 #include "SceneNode.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
-class CameraNode: public SceneNode
+class CameraNode : public SceneNode
 {
 public:
-
-
-	void update(double dT, InputHandler* input);
-	void draw();
-	
-
-	glm::mat4 getViewMatrix(){ return v; }
-
-	CameraNode(int resX, int resY, GLFWwindow* window);
+	CameraNode();
 	~CameraNode();
+
+
+	glm::mat4 getViewMatrix(){ return viewMatrix; }
+
 private:
-	glm::mat4 v;
-	GLFWwindow* window;
+	glm::mat4 viewMatrix;
 };
 
