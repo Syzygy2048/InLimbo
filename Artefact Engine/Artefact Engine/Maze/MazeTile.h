@@ -7,7 +7,7 @@ class MazeTile
 {
 public:
 	//this needs to be an uneven number
-	static const int TILE_SIZE = 79; 
+	static const int TILE_SIZE = 25; 
 	
 	static const int NEIGHBOR_TOP = 0;
 	static const int NEIGHBOR_TOP_RIGHT = 1;
@@ -24,8 +24,9 @@ public:
 	//sets the neighboring maze tile to this tile,use the constants defined in MazeTile for the relativePosition
 	void setNeighbor(MazeTile* neighbor, int relativePosition);
 
-private:
 	char* tile;
+private:
+	
 	MazeTile* top;
 	MazeTile* topRight;
 	MazeTile* right;

@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "Maze/MazeTile.h"
+#include "Maze\MazeGenerator.h" //TODO: move the constants into MazeTile, this shouldn't be exposed like this
 #include "SceneGraph\SceneNode.h"
 #include "SceneGraph\MeshNode.h"
 #include "SceneGraph\CameraNode.h"
@@ -45,7 +46,7 @@ int main(){
 	glewInit();
 	glGetError();		//glew is buggy and throws an openGL error no matter what, this handlies that error by ignoring it.
 
-	//MazeTile startTile;
+	MazeTile startTile;
 
 	InputHandler input(window);
 
@@ -68,7 +69,17 @@ int main(){
 	SceneNode sceneGraph(SceneNode::ROOT);
 	CameraNode* camera = new CameraNode();
 	sceneGraph.addNode(camera);
-	sceneGraph.addNode(new MeshNode("Asset//Models//duck.dae"));
+	sceneGraph.addNode(new MeshNode("Asset//Models//duck.dae"), glm::vec3(0, 0, 0)));
+
+
+	//for (int i = 0; i < startTile.TILE_SIZE; i++)
+	//{
+		//for (int j = 0; j < startTile.TILE_SIZE; j++)
+		//{
+			//if(startTile.tile[j + i * startTile.TILE_SIZE] == MazeGenerator::MAZE_WALL)
+			//	sceneGraph.addNode(new MeshNode("unused right now", glm::vec3(i * 2, 0, j * 2)));
+		//}
+	//}
 
 	//gameloop
 	double oldTime = glfwGetTime();

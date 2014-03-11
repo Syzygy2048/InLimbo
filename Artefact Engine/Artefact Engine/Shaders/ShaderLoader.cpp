@@ -158,8 +158,8 @@ GLuint ShaderLoader::loadShaderArray(std::vector<std::string> shaderPaths)
 		glGetShaderiv(shaderID, GL_COMPILE_STATUS, &result);
 		glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLength);
 		std::vector<char> shaderErrorMessage(logLength);	
-		glGetShaderInfoLog(shaderID, logLength, NULL, shaderErrorMessage.data());
-		fprintf(stdout, "%s\n", &shaderErrorMessage[0]);
+		//glGetShaderInfoLog(shaderID, logLength, NULL, shaderErrorMessage.data());
+		//fprintf(stdout, "%s\n", &shaderErrorMessage[0]);
 
 		glAttachShader(programID, shaderID);
 	}
@@ -168,8 +168,8 @@ GLuint ShaderLoader::loadShaderArray(std::vector<std::string> shaderPaths)
 	glGetProgramiv(programID, GL_LINK_STATUS, &result);
 	glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &logLength);
 	std::vector<char> programErrorMessage(logLength);
-	glGetProgramInfoLog(programID, logLength, NULL, &programErrorMessage[0]);
-	fprintf(stdout, "%s\n", &programErrorMessage[0]);
+	//glGetProgramInfoLog(programID, logLength, NULL, &programErrorMessage[0]);
+	//fprintf(stdout, "%s\n", &programErrorMessage[0]);
 	return programID;
 }
 

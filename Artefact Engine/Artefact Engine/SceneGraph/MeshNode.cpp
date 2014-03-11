@@ -1,10 +1,16 @@
+
+
 #include <GL\glew.h>
+
 #include "MeshNode.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+
 #include "../Shaders/ShaderLoader.h"
 
-MeshNode::MeshNode(std::string path) : SceneNode(NodeType::MESH), path(path)
+MeshNode::MeshNode(std::string path, glm::vec3 startPos) : SceneNode(NodeType::MESH), path(path)
 {
-	modelMatrix = glm::mat4(1.f);
+	modelMatrix = glm::translate(startPos);// glm::mat4(1.f);
 	std::vector<std::string> shaders;
 	shaders.push_back("Shaders//Vertex//simple_vertex_shader.glsl");
 	shaders.push_back("Shaders//Fragment//simple_fragment_shader.glsl");
@@ -88,8 +94,7 @@ MeshNode::MeshNode(std::string path) : SceneNode(NodeType::MESH), path(path)
 		0.982f, 0.099f, 0.879f
 	};
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	
 	
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
