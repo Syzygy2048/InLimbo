@@ -3,120 +3,87 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "ShaderProgram.h"
 
 
 ShaderLoader::ShaderLoader()
 {
+	std::string path;
+	path = "Shaders//Vertex//simple_vertex_shader.glsl";
+	loadShader(path, Shader::ShaderType::VERTEX);
+	path = "Shaders//Fragment//simple_fragment_shader.glsl";
+	loadShader(path, Shader::ShaderType::FRAGMENT);
+
+	ShaderProgram* shaderProgram = new ShaderProgram();
+	shaderProgram->setVertexShader(shaders.find("Shaders//Vertex//simple_vertex_shader.glsl")->second);
+	shaderProgram->setFragmentShader(shaders.find("Shaders//Fragment//simple_fragment_shader.glsl")->second);
+	shaderProgram->buildProgram();
+	shaderPrograms.insert(std::pair<std::string, ShaderProgram*>("defaultShader", shaderProgram));
+
 }
 
-GLuint ShaderLoader::loadShaders(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath)
+
+ShaderProgram* ShaderLoader::getShaderProgram(std::string shaderProgramIdentifier)
 {
-	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-	GLuint geometryShaderId;
-	
-	
-	std::string vertexShaderCode;
-	std::ifstream vertexShaderStream(vertexShaderPath, std::ios::in);
-	if (vertexShaderStream.is_open())
-	{
-		std::string line = "";
-		while (getline(vertexShaderStream, line))
-		{
-			vertexShaderCode += "\n" + line;
-		}
-		vertexShaderStream.close();
-	}
-
-	std::string fragmentShaderCode;
-
-	std::ifstream fragmentShaderStream(fragmentShaderPath, std::ios::in);
-	if (fragmentShaderStream.is_open())
-	{
-		std::string line = "";
-		while (getline(fragmentShaderStream, line))
-		{
-			fragmentShaderCode += "\n" + line;
-		}
-		fragmentShaderStream.close();
-	}
-	
-	std::string geometryShaderCode;
-	if (geometryShaderPath != nullptr){
-		geometryShaderId = glCreateShader(GL_GEOMETRY_SHADER);
-	
-		
-		std::ifstream geometryShaderStream(geometryShaderPath, std::ios::in);
-		if (geometryShaderStream.is_open())
-		{
-			std::string line = "";
-			while (getline(geometryShaderStream, line))
-			{
-				geometryShaderCode += "\n" + line;
-			}
-			geometryShaderStream.close();
-		}
-	}
-
-	GLint result = false;
-	int infoLogLength;
-
-	printf("Compiling shader: %s\n", vertexShaderPath);
-	char const* vertexSource = vertexShaderCode.c_str();
-	glShaderSource(vertexShaderId, 1, &vertexSource, NULL);
-	glCompileShader(vertexShaderId);
-
-	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &result);
-	glGetShaderiv(vertexShaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
-	std::vector<char> vertexShaderErrorMessage(infoLogLength);
-	glGetShaderInfoLog(vertexShaderId, infoLogLength, NULL, &vertexShaderErrorMessage[0]);
-	fprintf(stdout, "%s\n", &vertexShaderErrorMessage[0]);
-
-	
-	printf("Compiling shader: %s\n", fragmentShaderPath);
-	char const* fragmentSource = fragmentShaderCode.c_str();
-	glShaderSource(fragmentShaderId, 1, &fragmentSource, NULL);
-	glCompileShader(fragmentShaderId);
-
-	glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &result);
-	glGetShaderiv(fragmentShaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
-	std::vector<char> fragmentShaderErrorMessage(infoLogLength);
-	glGetShaderInfoLog(fragmentShaderId, infoLogLength, NULL, &fragmentShaderErrorMessage[0]);
-	fprintf(stdout, "%s\n", &fragmentShaderErrorMessage[0]);
-	
-
-	if (geometryShaderPath != nullptr)
-	{
-		printf("Compiling shader: %s\n", geometryShaderPath);
-		char const* geometrySource = geometryShaderCode.c_str();
-		glShaderSource(geometryShaderId, 1, &geometrySource, NULL);
-		glCompileShader(geometryShaderId);
-
-		glGetShaderiv(geometryShaderId, GL_COMPILE_STATUS, &result);
-		glGetShaderiv(geometryShaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
-		std::vector<char> geometryShaderErrorMessage(infoLogLength);
-		glGetShaderInfoLog(geometryShaderId, infoLogLength, NULL, &geometryShaderErrorMessage[0]);
-		fprintf(stdout, "%s\n", &geometryShaderErrorMessage[0]);
-	}
-
-	GLuint shaderProgramId = glCreateProgram();
-	
-	glAttachShader(shaderProgramId, vertexShaderId);
-	glDeleteShader(vertexShaderId);
-	
-	glAttachShader(shaderProgramId, fragmentShaderId);
-	glDeleteShader(fragmentShaderId);
-
-	if (geometryShaderPath != nullptr)
-	{
-		glAttachShader(shaderProgramId, geometryShaderId);
-		glDeleteShader(geometryShaderId);
-	}
-
-
-	return shaderProgramId;
+	return shaderPrograms.find(shaderProgramIdentifier)->second;
 }
 
+ShaderLoader* ShaderLoader::getInstance()
+{
+	static ShaderLoader INSTANCE;
+	return &INSTANCE;
+}
+
+Shader* ShaderLoader::loadShader(std::string path, Shader::ShaderType type)
+{
+	if (shaders.find(path) != shaders.end()) 
+		return shaders.find(path)->second;
+	Shader* shader = new Shader(type, path);
+	GLuint shaderId;
+	
+	switch (type){
+	case Shader::ShaderType::VERTEX: 
+		shaderId = glCreateShader(GL_VERTEX_SHADER);
+		break;
+	case Shader::ShaderType::FRAGMENT:
+		shaderId = glCreateShader(GL_FRAGMENT_SHADER); 
+		break;
+	case Shader::ShaderType::GEOMETRY:
+		shaderId = glCreateShader(GL_GEOMETRY_SHADER);
+		break;
+	default: std::cerr << "shader type doesn't exist" << std::endl;
+	}
+	
+	std::string shaderCode;
+	std::ifstream codeStream(path, std::ios::in);
+	if (codeStream.is_open())
+	{
+		std::string line = "";
+		while (getline(codeStream, line))
+			shaderCode += "\n" + line;
+		codeStream.close();
+	}
+
+	std::cerr << "compiling shader: " << path << std::endl;
+	char const * sourcePointer = shaderCode.c_str();
+	glShaderSource(shaderId, 1, &sourcePointer, NULL);
+	glCompileShader(shaderId);
+
+	GLint result = GL_FALSE;
+	int logLength;
+
+	// Check Shader
+	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logLength);
+	std::vector<char> shaderErrorMessage(logLength);
+	//glGetShaderInfoLog(shaderID, logLength, NULL, shaderErrorMessage.data());
+	//fprintf(stdout, "%s\n", &shaderErrorMessage[0]);
+
+	shader->setShaderId(shaderId);
+	shaders.insert(std::pair<std::string, Shader*>(path, shader));
+
+	return shader;
+}
 
 GLuint ShaderLoader::loadShaderArray(std::vector<std::string> shaderPaths)
 {

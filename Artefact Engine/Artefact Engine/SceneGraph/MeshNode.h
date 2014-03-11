@@ -7,7 +7,9 @@
 class MeshNode : public SceneNode
 {
 public:
-	MeshNode(std::string path, glm::vec3);
+	MeshNode(glm::vec3 startPos);
+	MeshNode(MeshNode* meshNode, glm::vec3 startPos);
+
 	~MeshNode();
 
 	void update(double dT, InputHandler* input);

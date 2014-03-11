@@ -5,6 +5,13 @@
 #include <unordered_map>
 #include "../SceneGraph/MeshNode.h"
 
+#include <assimp/Importer.hpp>		// C++ importer interface
+#include <assimp/scene.h>			// Output data structure
+#include <assimp/postprocess.h>		// Post processing flags
+//Hack
+#include <assimp/cimport.h>
+
+
 class AssetLoader
 {
 public:
@@ -13,11 +20,7 @@ public:
 	MeshNode* getMesh();
 	
 	
-	static AssetLoader* getInstance()
-	{
-		static AssetLoader INSTANCE;
-		return &INSTANCE;
-	}
+	static AssetLoader* getInstance();
 	~AssetLoader();
 
 private:
@@ -26,10 +29,10 @@ private:
 	void operator=(AssetLoader const&);
 
 	std::unordered_map<std::string, MeshNode> map;
-
+	MeshNode* meshNode;
 
 	GLuint loadTexture(const char* imagepath);
-	GLuint loadMesh(const char* path);
+	void loadMesh(MeshNode* node, aiMesh* mesh, const char* path);
 
 };
 

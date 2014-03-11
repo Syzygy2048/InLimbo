@@ -11,6 +11,7 @@
 #include "SceneGraph\SceneNode.h"
 #include "SceneGraph\MeshNode.h"
 #include "SceneGraph\CameraNode.h"
+#include "Asset\AssetLoader.h"
 
 #include "InputHandler.h"
 
@@ -69,17 +70,17 @@ int main(){
 	SceneNode sceneGraph(SceneNode::ROOT);
 	CameraNode* camera = new CameraNode();
 	sceneGraph.addNode(camera);
-	sceneGraph.addNode(new MeshNode("Asset//Models//duck.dae"), glm::vec3(0, 0, 0)));
+	//sceneGraph.addNode(new MeshNode("Asset//Models//duck.dae"), glm::vec3(0, 0, 0)));
+	sceneGraph.addNode(AssetLoader::getInstance()->getMesh());
 
-
-	//for (int i = 0; i < startTile.TILE_SIZE; i++)
-	//{
-		//for (int j = 0; j < startTile.TILE_SIZE; j++)
-		//{
-			//if(startTile.tile[j + i * startTile.TILE_SIZE] == MazeGenerator::MAZE_WALL)
-			//	sceneGraph.addNode(new MeshNode("unused right now", glm::vec3(i * 2, 0, j * 2)));
-		//}
-	//}
+	/*for (int i = 0; i < startTile.TILE_SIZE; i++)
+	{
+		for (int j = 0; j < startTile.TILE_SIZE; j++)
+		{
+			if(startTile.tile[j + i * startTile.TILE_SIZE] == MazeGenerator::MAZE_WALL)
+				sceneGraph.addNode(new MeshNode(AssetLoader::getInstance()->getMesh(), glm::vec3(i * 2, 0, j * 2)));
+		}
+	} */
 
 	//gameloop
 	double oldTime = glfwGetTime();
@@ -113,9 +114,6 @@ int main(){
 			sceneGraph.update(dT, &input);
 		    //	dynamicWorld->stepSimulation(dT, 4, 1./60.);
 			sceneGraph.draw(projection * camera->getViewMatrix());
-
-		
-			
 
 			glfwSwapBuffers(window); //actually renders the frame
 			glfwPollEvents();

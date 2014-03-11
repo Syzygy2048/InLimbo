@@ -2,14 +2,32 @@
 
 #include <GL\glew.h>
 #include <vector>
+#include <string>
+#include <map>
+
+#include "Shader.h"
+#include "ShaderProgram.h"
 
 class ShaderLoader
 {
 public:
-	GLuint loadShaders(const char* vertexShaderPath, const char* fragmentShaderPath, const char* geometryShaderPath);
+
 	GLuint loadShaderArray(std::vector<std::string> shaderPaths);
 	
-	ShaderLoader();
+	Shader* loadShader(std::string, Shader::ShaderType type);
+	ShaderProgram* getShaderProgram(std::string shaderProgramIdentifier);
+
+	static ShaderLoader* getInstance();
 	~ShaderLoader();
+
+private:
+	ShaderLoader();
+	ShaderLoader(ShaderLoader const&);
+	void operator=(ShaderLoader const&);
+	
+	std::map<std::string, Shader*> shaders;
+	std::map<std::string, ShaderProgram*> shaderPrograms;
+
+	
 };
 

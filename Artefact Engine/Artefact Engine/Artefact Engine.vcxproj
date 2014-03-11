@@ -80,6 +80,8 @@
     <ClCompile Include="Maze\MazeTile.cpp" />
     <ClCompile Include="SceneGraph\MeshNode.cpp" />
     <ClCompile Include="SceneGraph\SceneNode.cpp" />
+    <ClCompile Include="Shaders\ShaderProgram.cpp" />
+    <ClCompile Include="Shaders\Shader.cpp" />
     <ClCompile Include="Shaders\ShaderLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +92,8 @@
     <ClInclude Include="Maze\MazeTile.h" />
     <ClInclude Include="SceneGraph\MeshNode.h" />
     <ClInclude Include="SceneGraph\SceneNode.h" />
+    <ClInclude Include="Shaders\ShaderProgram.h" />
+    <ClInclude Include="Shaders\Shader.h" />
     <ClInclude Include="Shaders\ShaderLoader.h" />
   </ItemGroup>
   <ItemGroup>
