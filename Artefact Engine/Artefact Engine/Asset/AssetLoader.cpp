@@ -4,14 +4,23 @@
 
 #include <GL\glfw3.h>
 #include <glm\glm.hpp>
+#include "../Texture.h"
 
-
-
+Texture* textureduck;
 AssetLoader::AssetLoader()
 {	
 	MeshNode* node = new MeshNode(glm::vec3(0, 0, 0));
 	std::string path = "Asset//Models//duck.dae";
 	
+
+
+	int textureQuality = 1;
+	int mipmap = 2;
+
+	textureduck = new Texture("Asset/Models/Mimic_Octopus_2.jpg");
+	textureduck->Bind(0, textureQuality, mipmap);
+
+
 
 	//Importer Hack
 	const aiScene* aScene = aiImportFileEx(path.c_str(),
