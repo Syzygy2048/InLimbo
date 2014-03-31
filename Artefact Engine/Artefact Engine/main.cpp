@@ -14,6 +14,7 @@
 #include "Asset\AssetLoader.h"
 #include "Enums\MazeEnums.h"
 
+
 #include "InputHandler.h"
 
 #include "bullet\btBulletDynamicsCommon.h"
@@ -22,6 +23,7 @@
 #define WINDOW_TITLE "In Limbo"
 #define resX 1280
 #define resY 720
+
 
 int main(){
 	//init
@@ -71,6 +73,7 @@ int main(){
 	SceneNode sceneGraph(SceneNode::ROOT);
 	CameraNode* camera = new CameraNode();
 	sceneGraph.addNode(camera);
+	
 	//sceneGraph.addNode(new MeshNode("Asset//Models//duck.dae"), glm::vec3(0, 0, 0)));
 	sceneGraph.addNode(AssetLoader::getInstance()->getMesh("bla"));
 
