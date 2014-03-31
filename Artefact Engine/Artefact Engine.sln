@@ -1,20 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Artefact Engine", "Artefact Engine\Artefact Engine.vcxproj", "{ED5BC980-EEC6-4332-B784-6617DDA5F3E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		MinSizeRel|Win32 = MinSizeRel|Win32
 		Release|Win32 = Release|Win32
+		RelWithDebInfo|Win32 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{ED5BC980-EEC6-4332-B784-6617DDA5F3E3}.Debug|Win32.ActiveCfg = Debug|Win32
 		{ED5BC980-EEC6-4332-B784-6617DDA5F3E3}.Debug|Win32.Build.0 = Debug|Win32
+		{ED5BC980-EEC6-4332-B784-6617DDA5F3E3}.MinSizeRel|Win32.ActiveCfg = Release|Win32
+		{ED5BC980-EEC6-4332-B784-6617DDA5F3E3}.MinSizeRel|Win32.Build.0 = Release|Win32
 		{ED5BC980-EEC6-4332-B784-6617DDA5F3E3}.Release|Win32.ActiveCfg = Release|Win32
 		{ED5BC980-EEC6-4332-B784-6617DDA5F3E3}.Release|Win32.Build.0 = Release|Win32
+		{ED5BC980-EEC6-4332-B784-6617DDA5F3E3}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
+		{ED5BC980-EEC6-4332-B784-6617DDA5F3E3}.RelWithDebInfo|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

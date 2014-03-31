@@ -12,10 +12,11 @@
 #include "SceneGraph\MeshNode.h"
 #include "SceneGraph\CameraNode.h"
 #include "Asset\AssetLoader.h"
+#include "Enums\MazeEnums.h"
 
 #include "InputHandler.h"
 
-//#include "bullet\btBulletDynamicsCommon.h"
+#include "bullet\btBulletDynamicsCommon.h"
 
 //quick and dirty settings
 #define WINDOW_TITLE "In Limbo"
@@ -53,14 +54,14 @@ int main(){
 
 	
 	//init physics
-	/*btBroadphaseInterface* broadphase = new btDbvtBroadphase();	//collision entities are organized via an AABB tree
+	btBroadphaseInterface* broadphase = new btDbvtBroadphase();	//collision entities are organized via an AABB tree
 	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
 	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
 	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
 
 	btDiscreteDynamicsWorld* dynamicWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-	dynamicWorld->setGravity(btVector3(0, -10, 0));
-	*/
+	dynamicWorld->setGravity(btVector3(0, -10, 0)); 
+	
 	
 	//init camera and projection matrix
 	glm::mat4 projection = glm::perspective((float)90, (float)resX / (float)resY, 0.1f, 100.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
@@ -71,14 +72,17 @@ int main(){
 	CameraNode* camera = new CameraNode();
 	sceneGraph.addNode(camera);
 	//sceneGraph.addNode(new MeshNode("Asset//Models//duck.dae"), glm::vec3(0, 0, 0)));
-	sceneGraph.addNode(AssetLoader::getInstance()->getMesh());
+	sceneGraph.addNode(AssetLoader::getInstance()->getMesh("bla"));
 
 	/*for (int i = 0; i < startTile.TILE_SIZE; i++)
 	{
 		for (int j = 0; j < startTile.TILE_SIZE; j++)
 		{
-			if(startTile.tile[j + i * startTile.TILE_SIZE] == MazeGenerator::MAZE_WALL)
-				sceneGraph.addNode(new MeshNode(AssetLoader::getInstance()->getMesh(), glm::vec3(i * 2, 0, j * 2)));
+			if (startTile.tile[j + i * startTile.TILE_SIZE] == MAZE_WALL)
+			{
+				sceneGraph.addNode(AssetLoader::getInstance()->getMesh("bla"));
+				//sceneGraph.addNode(new MeshNode(AssetLoader::getInstance()->getMesh(), glm::vec3(i * 2, 0, j * 2)));
+			}
 		}
 	} */
 

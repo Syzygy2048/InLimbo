@@ -1,9 +1,12 @@
 #include "MazeGenerator.h"
 
 #include <iostream>
-#include <time.h>
+/* profiling
+#include <time.h> */
 
 #include <ctime>
+
+#include "../Enums/MazeEnums.h"
 MazeGenerator::MazeGenerator(const int size) : mazeSize(size)
 {
 }
@@ -16,7 +19,8 @@ MazeGenerator::~MazeGenerator()
 //Generates a 2D int matrix of size mazeSize and fills it with an imperfect maze (DepthFirst-Digger-Algorithm with removal of semi randomly selected areas to make it imperfect)
 char* MazeGenerator::generate()
 {
-	clock_t begin = clock();
+	/* profiling
+	clock_t begin = clock(); */
 	srand(time(NULL));
 	initializeMaze();
 	initializeDigger();
@@ -34,8 +38,31 @@ char* MazeGenerator::generate()
 		}
 	} while (!(startPos.xPos == digger.position.xPos && startPos.yPos == digger.position.yPos));
 
+	/* profiling
 	clock_t end = clock();
-	std::cerr << double(end-begin)/CLOCKS_PER_SEC << std::endl;
+	std::cerr << double(end-begin)/CLOCKS_PER_SEC << std::endl;  */
+	
+	//remove random blocks to make the maze imperfect
+	for (int i = 0; i <= mazeSize; i++) //removes mazeSize semi random blocks from the maze
+	{
+		int posX = (rand() % (mazeSize / 2 - 2)) * 2 + 2;	//we only want to check for walls here, this is guaranteed to be an even number, which makes it more likely to be a wall
+		int posY = (rand() % (mazeSize / 2 - 2)) * 2 + 2;	// -2 and +2 to remove cases where the following checks would go out of bounds
+
+		if (maze[posX + posY * mazeSize] == MAZE_WALL &&
+			(maze[posX + 1 + posY * mazeSize] == MAZE_WALL || maze[posX - 1 + posY * mazeSize] == MAZE_WALL) !=
+			(maze[posX + (posY + 1)* mazeSize] == MAZE_WALL || maze[posX + (posY - 1) * mazeSize] == MAZE_WALL)
+			&&
+			(maze[posX + 1 + posY * mazeSize] == MAZE_WALL && maze[posX - 1 + posY * mazeSize] == MAZE_WALL) !=
+			(maze[posX + (posY + 1)* mazeSize] == MAZE_WALL && maze[posX + (posY - 1) * mazeSize] == MAZE_WALL))
+		{ 
+				maze[posX + posY * mazeSize] = REMOVED_BLOCK;
+		}
+		else
+		{
+			i--;
+		}
+	}
+
 	for (int i = 0; i < mazeSize; i++)
 	{
 		for (int j = 0; j < mazeSize; j++)

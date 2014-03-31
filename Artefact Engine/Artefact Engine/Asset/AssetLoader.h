@@ -17,7 +17,7 @@ class AssetLoader
 public:
 
 
-	MeshNode* getMesh();
+	MeshNode* getMesh(std::string identifier);
 	
 	
 	static AssetLoader* getInstance();

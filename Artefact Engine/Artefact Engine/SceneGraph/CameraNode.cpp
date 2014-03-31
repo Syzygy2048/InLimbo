@@ -10,6 +10,10 @@ CameraNode::CameraNode() : SceneNode(NodeType::CAMERA)
 		);
 }
 
+bool CameraNode::isActiveCamera()
+{
+	return isActive;
+}
 
 CameraNode::~CameraNode()
 {

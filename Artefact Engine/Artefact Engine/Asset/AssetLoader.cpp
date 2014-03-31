@@ -16,9 +16,11 @@ AssetLoader::AssetLoader()
 	//Importer Hack
 	const aiScene* aScene = aiImportFileEx(path.c_str(),
 		aiProcessPreset_TargetRealtime_Quality |
+		aiProcess_JoinIdenticalVertices |
 		aiProcess_FindInstances |
 		aiProcess_ValidateDataStructure |
-		aiProcess_OptimizeMeshes,
+		aiProcess_OptimizeMeshes |
+		aiProcess_Triangulate,
 		NULL);
 
 	// If the import failed, report it
@@ -39,6 +41,7 @@ AssetLoader::AssetLoader()
 
 		glBindVertexArray(0);
 	}
+
 	meshNode = node;
 }
 
@@ -109,7 +112,7 @@ void AssetLoader::loadMesh(MeshNode* node, aiMesh* mesh, const char* path)
 }	
 
 
-MeshNode* AssetLoader::getMesh()
+MeshNode* AssetLoader::getMesh(std::string identifier)
 {
 	return meshNode;
 }

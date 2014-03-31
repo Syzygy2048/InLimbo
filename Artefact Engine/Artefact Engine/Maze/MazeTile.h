@@ -7,7 +7,7 @@ class MazeTile
 {
 public:
 	//this needs to be an uneven number
-	static const int TILE_SIZE = 25; 
+	static const int TILE_SIZE = 77; 
 	
 	static const int NEIGHBOR_TOP = 0;
 	static const int NEIGHBOR_TOP_RIGHT = 1;

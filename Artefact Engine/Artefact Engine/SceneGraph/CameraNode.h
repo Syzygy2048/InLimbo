@@ -11,9 +11,12 @@ public:
 	~CameraNode();
 
 
+	bool isActiveCamera();
+	//void set
 	glm::mat4 getViewMatrix(){ return viewMatrix; }
 
 private:
 	glm::mat4 viewMatrix;
+	bool isActive = false;
 };
 

@@ -50,7 +50,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\madlibs\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32.lib;assimp.lib;FreeImage.lib;libpng15.lib;zlib.lib;opengl32.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;assimp.lib;FreeImage.lib;libpng15.lib;zlib.lib;opengl32.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <ProjectReference>
@@ -86,6 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asset\AssetLoader.h" />
+    <ClInclude Include="Enums\MazeEnums.h" />
+    <ClInclude Include="Enums\SceneGraphEnums.h" />
+    <ClInclude Include="Enums\ShaderEnums.h" />
     <ClInclude Include="SceneGraph\CameraNode.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Maze\MazeGenerator.h" />
