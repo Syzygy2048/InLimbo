@@ -17,7 +17,6 @@
 
 #include "InputHandler.h"
 
-#include "bullet\btBulletDynamicsCommon.h"
 
 //quick and dirty settings
 #define WINDOW_TITLE "In Limbo"
@@ -56,15 +55,8 @@ int main(){
 
 	
 	//init physics
-	btBroadphaseInterface* broadphase = new btDbvtBroadphase();	//collision entities are organized via an AABB tree
-	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
 
-	btDiscreteDynamicsWorld* dynamicWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-	dynamicWorld->setGravity(btVector3(0, -10, 0)); 
-	
-	
+
 	//init camera and projection matrix
 	glm::mat4 projection = glm::perspective((float)90, (float)resX / (float)resY, 0.1f, 100.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
 	glm::mat4 vp;
@@ -119,7 +111,6 @@ int main(){
 			input.handleInput();
 
 			sceneGraph.update(dT, &input);
-		    //	dynamicWorld->stepSimulation(dT, 4, 1./60.);
 			sceneGraph.draw(projection * camera->getViewMatrix());
 
 			glfwSwapBuffers(window); //actually renders the frame
