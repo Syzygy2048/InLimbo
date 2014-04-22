@@ -4,24 +4,15 @@
 
 #include <GL\glfw3.h>
 #include <glm\glm.hpp>
-#include "../Texture.h"
 
-Texture* textureduck;
+#include "../Enums/MeshPaths.h"
+
 AssetLoader::AssetLoader()
 {	
-	MeshNode* node = new MeshNode(glm::vec3(0, 0, 0));
-	std::string path = "Asset//Models//duck.dae";
+	//do this for all assets
 	
-
-
-	int textureQuality = 1;
-	int mipmap = 2;
-
-	textureduck = new Texture("Asset/Models/Mimic_Octopus_2.jpg");
-	textureduck->Bind(0, textureQuality, mipmap);
-
-
-
+	std::string path = DUCK;
+	
 	//Importer Hack
 	const aiScene* aScene = aiImportFileEx(path.c_str(),
 		aiProcessPreset_TargetRealtime_Quality |
@@ -41,17 +32,39 @@ AssetLoader::AssetLoader()
 	{
 		aiMesh* mesh = aScene->mMeshes[0];
 
-		GLuint vao;
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
 
-		node->setVao(vao);
-		loadMesh(node, mesh, path.c_str());
+		//GLuint vao;
+		//glGenVertexArray(1, &vao);
+		//glBindVertexArray(vao);
 
-		glBindVertexArray(0);
+		//mesh->setVao(vao);
+		//mesh->setVertexBuffer(loadMesh(path.c_str()));
+
+		//glBindVertexArray(0);
+
+
+		assets.insert(std::pair<std::string, const aiScene*>(path, aScene));
 	}
 
-	meshNode = node;
+	
+	
+	path = CUBE;
+	aScene = aiImportFileEx(path.c_str(),
+		aiProcessPreset_TargetRealtime_Quality |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_FindInstances |
+		aiProcess_ValidateDataStructure |
+		aiProcess_OptimizeMeshes |
+		aiProcess_Triangulate,
+		NULL);
+	if (!aScene)
+	{
+		std::cerr << "Failed to open" << path << std::endl;
+	}
+	else if (aScene->HasMeshes())
+	{
+		assets.insert(std::pair<std::string, const aiScene*>(path, aScene));
+	}
 }
 
 AssetLoader* AssetLoader::getInstance()
@@ -121,9 +134,9 @@ void AssetLoader::loadMesh(MeshNode* node, aiMesh* mesh, const char* path)
 }	
 
 
-MeshNode* AssetLoader::getMesh(std::string identifier)
+const aiScene* AssetLoader::getMesh(std::string identifier)
 {
-	return meshNode;
+	return assets.find(identifier)->second;
 }
 
 

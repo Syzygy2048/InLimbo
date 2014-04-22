@@ -31,10 +31,15 @@ private:
 	GLuint vao;
 
 	GLuint vbo; //vertex
+	std::vector<float> vertices;
 	GLuint ibo; //index
+	std::vector<unsigned int> indices;
 	GLuint nbo; //normals
+	std::vector<float> normals;
 	GLuint uvbo; //UV coordinates
+	std::vector<unsigned int> uvs;
 	GLuint wbo; //weights
+	std::vector<float> weights;
 	GLuint cbo; //color
 	
 	GLuint shaderProgram;

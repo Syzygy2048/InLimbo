@@ -33,6 +33,7 @@ MeshNode::MeshNode(glm::vec3 startPos) : SceneNode(NodeType::MESH), path(path)
 
 void MeshNode::draw(glm::mat4 vp)
 {
+	SceneNode::draw(vp);
 	mvp = vp * modelMatrix;
 
 	glUseProgram(shaderProgram);
@@ -49,6 +50,7 @@ void MeshNode::draw(glm::mat4 vp)
 
 void MeshNode::update(double dT, InputHandler* input)
 {
+	SceneNode::update(dT, input);
 }
 
 MeshNode::~MeshNode()

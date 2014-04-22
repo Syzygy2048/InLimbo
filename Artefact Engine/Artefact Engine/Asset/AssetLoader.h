@@ -15,11 +15,8 @@
 class AssetLoader
 {
 public:
-
-
-	MeshNode* getMesh(std::string identifier);
-	
-	
+	const aiScene* getMesh(std::string identifier);
+		
 	static AssetLoader* getInstance();
 	~AssetLoader();
 
@@ -28,7 +25,7 @@ private:
 	AssetLoader(AssetLoader const&);             
 	void operator=(AssetLoader const&);
 
-	std::unordered_map<std::string, MeshNode> map;
+	std::unordered_map<std::string, const aiScene*> assets;
 	MeshNode* meshNode;
 
 	GLuint loadTexture(const char* imagepath);

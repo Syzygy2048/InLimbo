@@ -19,7 +19,6 @@ ShaderLoader::ShaderLoader()
 	shaderProgram->setFragmentShader(shaders.find("Shaders//Fragment//simple_fragment_shader.glsl")->second);
 	shaderProgram->buildProgram();
 	shaderPrograms.insert(std::pair<std::string, ShaderProgram*>("defaultShader", shaderProgram));
-
 }
 
 

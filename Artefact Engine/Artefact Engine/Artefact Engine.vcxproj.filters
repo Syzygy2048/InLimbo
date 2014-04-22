@@ -48,9 +48,6 @@
     <ClCompile Include="Shaders\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Maze\MazeGenerator.h">
@@ -90,8 +87,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enums\ShaderEnums.h">
-	</ClInclude>
-    <ClInclude Include="Texture.h">
+    </ClInclude>
+    <ClInclude Include="Enums\MeshPaths.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -101,10 +98,5 @@
     <None Include="Shaders\Fragment\simple_fragment_shader.glsl" />
     <None Include="Shaders\Fragment\texture.frag" />
     <None Include="Shaders\Vertex\texture.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\..\..\Public\Pictures\Sample Pictures\Chrysanthemum.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>

@@ -13,10 +13,12 @@
 #include "SceneGraph\CameraNode.h"
 #include "Asset\AssetLoader.h"
 #include "Enums\MazeEnums.h"
+#include "Enums\SceneGraphEnums.h"
 
 
 #include "InputHandler.h"
 
+//#include "PxPhysicsAPI.h" https://developer.nvidia.com/sites/default/files/akamai/physx/Manual/Startup.html
 
 //quick and dirty settings
 #define WINDOW_TITLE "In Limbo"
@@ -50,6 +52,8 @@ int main(){
 	glGetError();		//glew is buggy and throws an openGL error no matter what, this handlies that error by ignoring it.
 
 	MazeTile startTile;
+	startTile.mergeAsMesh();
+	startTile.bind();
 
 	InputHandler input(window);
 
@@ -62,12 +66,13 @@ int main(){
 	glm::mat4 vp;
 
 	//init scenegraph
-	SceneNode sceneGraph(SceneNode::ROOT);
+	SceneNode sceneGraph(ROOT);
 	CameraNode* camera = new CameraNode();
 	sceneGraph.addNode(camera);
+	sceneGraph.addNode(&startTile);
 	
 	//sceneGraph.addNode(new MeshNode("Asset//Models//duck.dae"), glm::vec3(0, 0, 0)));
-	sceneGraph.addNode(AssetLoader::getInstance()->getMesh("bla"));
+	//sceneGraph.addNode(AssetLoader::getInstance()->getMesh("bla"));
 
 	/*for (int i = 0; i < startTile.TILE_SIZE; i++)
 	{

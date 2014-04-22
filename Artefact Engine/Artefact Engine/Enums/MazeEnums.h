@@ -1,3 +1,5 @@
+#pragma once
+
 enum TileType {
 	MAZE_HALLWAY = ' ',
 	MAZE_WALL = '#',
