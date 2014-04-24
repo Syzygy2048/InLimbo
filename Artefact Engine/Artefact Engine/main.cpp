@@ -119,6 +119,11 @@ int main(){
 	gBox = PxCreateDynamic(*gPhysicsSDK, boxPos, boxGeometry, *material, 1.0f);		//Creating rigid static actor
 	gScene->addActor(*gBox);		
 	*/
+	glm::vec3 startinPos;
+	MeshNode mesh(startinPos);
+	mesh.loadMesh();
+	mesh.bind();
+
 	MazeTile startTile;
 	startTile.mergeAsMesh();
 	startTile.createCollisionShape(gScene, gPhysicsSDK, cooking);

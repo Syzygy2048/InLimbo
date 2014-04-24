@@ -22,12 +22,14 @@ public:
 	void setWeightBuffer(GLuint vbo){ wbo = vbo; }
 	void setIndexBuffer(GLuint vbo){ ibo = vbo; }
 	void setNumberOfFaces(int numOfFaces) { numberOfFaces = numOfFaces; }
-
-
+	void loadMesh();
+	void bind();
+	
 
 private:
 	const std::string path;
-
+	//std::vector<glm::vec3> vertices;
+	//std::vector<unsigned int> faces;
 	GLuint vao;
 
 	GLuint vbo; //vertex
@@ -43,7 +45,8 @@ private:
 	GLuint cbo; //color
 	
 	GLuint shaderProgram;
-
+	
+	
 
 	GLuint mvpLocation;		//mvp identifier for shader
 	glm::mat4 mvp;

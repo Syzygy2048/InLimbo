@@ -45,11 +45,17 @@ const aiScene* AssetLoader::getMesh(std::string identifier)
 	if (assets.count(identifier) == 0)
 	{
 		loadMesh(identifier);
+		//loadTexture(identifier);
 		assets.find(identifier)->second;
 	}
 	return assets.find(identifier)->second;
 }
 
+void AssetLoader::loadTexture(std::string identifyer)
+{
+	
+	texture = new Texture(identifyer);
+}
 
 
 
