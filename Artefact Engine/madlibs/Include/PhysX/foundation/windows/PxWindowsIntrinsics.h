@@ -31,8 +31,8 @@
 #ifndef PX_FOUNDATION_PX_WINDOWS_INTRINSICS_H
 #define PX_FOUNDATION_PX_WINDOWS_INTRINSICS_H
 
-#include "foundation/Px.h"
-#include "foundation/PxAssert.h"
+#include "PhysX/foundation/Px.h"
+#include "PhysX/foundation/PxAssert.h"
 
 #if !(defined PX_WINDOWS || defined PX_WINMODERN)
 	#error "This file should only be included by Windows or WIN8ARM builds!!"

@@ -33,12 +33,12 @@
 /** \addtogroup cooking
 @{
 */
-#include "common/PxPhysXCommonConfig.h"      
-#include "common/PxTolerancesScale.h"
-#include "cooking/Pxc.h"
+#include "PhysX/common/PxPhysXCommonConfig.h"      
+#include "PhysX/common/PxTolerancesScale.h"
+#include "PhysX/cooking/Pxc.h"
 
-#include "cooking/PxConvexMeshDesc.h"
-#include "cooking/PxTriangleMeshDesc.h"
+#include "PhysX/cooking/PxConvexMeshDesc.h"
+#include "PhysX/cooking/PxTriangleMeshDesc.h"
 
 #ifndef PX_DOXYGEN
 namespace physx

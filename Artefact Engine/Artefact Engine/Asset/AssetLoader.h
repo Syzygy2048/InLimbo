@@ -28,8 +28,10 @@ private:
 	std::unordered_map<std::string, const aiScene*> assets;
 	MeshNode* meshNode;
 
-	GLuint loadTexture(const char* imagepath);
-	void loadMesh(MeshNode* node, aiMesh* mesh, const char* path);
+	void loadMesh(std::string identifyer);
+	//GLuint loadTexture(const char* imagepath);
+	//void loadMesh(MeshNode* node, aiMesh* mesh, const char* path);
+	
 
 };
 

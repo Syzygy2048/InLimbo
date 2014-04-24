@@ -31,23 +31,23 @@
 #ifndef PX_FOUNDATION_PX_INTRINSICS_H
 #define PX_FOUNDATION_PX_INTRINSICS_H
 
-#include "foundation/PxPreprocessor.h"
+#include "PhysX/foundation/PxPreprocessor.h"
 
 
 #if (defined PX_WINDOWS  || defined PX_WINMODERN)
-	#include "foundation/windows/PxWindowsIntrinsics.h"
+	#include "PhysX/foundation/windows/PxWindowsIntrinsics.h"
 #elif defined PX_X360
-	#include "foundation/xbox360/PxXbox360Intrinsics.h"
+	#include "PhysX/foundation/xbox360/PxXbox360Intrinsics.h"
 #elif (defined PX_LINUX || defined PX_ANDROID || defined PX_APPLE || defined PX_PS4)
-	#include "foundation/unix/PxUnixIntrinsics.h"
+	#include "PhysX/foundation/unix/PxUnixIntrinsics.h"
 #elif defined PX_PS3
-	#include "foundation/ps3/PxPS3Intrinsics.h"
+	#include "PhysX/foundation/ps3/PxPS3Intrinsics.h"
 #elif defined PX_PSP2
-	#include "foundation/psp2/PxPSP2Intrinsics.h"
+	#include "PhysX/foundation/psp2/PxPSP2Intrinsics.h"
 #elif defined PX_WIIU
-	#include "foundation/wiiu/PxWiiUIntrinsics.h"
+	#include "PhysX/foundation/wiiu/PxWiiUIntrinsics.h"
 #elif defined PX_XBOXONE
-	#include "foundation/XboxOne/PxXboxOneIntrinsics.h"
+	#include "PhysX/foundation/XboxOne/PxXboxOneIntrinsics.h"
 #else
 	#error "Platform not supported!"
 #endif

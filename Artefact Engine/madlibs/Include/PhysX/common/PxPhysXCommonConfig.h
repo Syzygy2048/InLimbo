@@ -34,7 +34,7 @@
 /** \addtogroup common 
 @{ */
 
-#include "foundation/Px.h"
+#include "PhysX/foundation/Px.h"
 
 
 // define API function declaration (public API only needed because of extensions)

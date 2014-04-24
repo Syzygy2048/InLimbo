@@ -1,5 +1,6 @@
 #pragma once
 
+#include <PhysX\PxPhysicsAPI.h>
 #include <iostream>
 #include <vector>
 #include "../SceneGraph/SceneNode.h"
@@ -22,6 +23,8 @@ public:
 	static const int NEIGHBOR_TOP_LEFT = 7;
 	
 	void bind();
+	void mergeAsMesh();
+	void createCollisionShape(physx::PxScene* scene, physx::PxPhysics* physicsSDK, physx::PxCooking* cooking);
 
 	void update(double dT, InputHandler* input);
 	void draw(glm::mat4 vp);
@@ -34,7 +37,7 @@ public:
 
 	char* tile;
 
-	void mergeAsMesh();
+	
 private:
 	
 	MazeTile* top;

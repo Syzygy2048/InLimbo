@@ -35,8 +35,8 @@
 @{
 */
 
-#include "foundation/PxVersionNumber.h"
-#include "foundation/PxSimpleTypes.h"
+#include "PhysX/foundation/PxVersionNumber.h"
+#include "PhysX/foundation/PxSimpleTypes.h"
 
 /** files to always include */
 #include <string.h>

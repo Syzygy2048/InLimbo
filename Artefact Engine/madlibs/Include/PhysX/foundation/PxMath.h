@@ -38,8 +38,8 @@
 #include <math.h>
 #include <float.h>
 
-#include "foundation/PxIntrinsics.h"
-#include "foundation/PxAssert.h"
+#include "PhysX/foundation/PxIntrinsics.h"
+#include "PhysX/foundation/PxAssert.h"
 
 #ifndef PX_DOXYGEN
 namespace physx

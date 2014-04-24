@@ -35,8 +35,8 @@
   @{
 */
 
-#include "foundation/PxVersionNumber.h"
-#include "foundation/PxErrors.h"
+#include "PhysX/foundation/PxVersionNumber.h"
+#include "PhysX/foundation/PxErrors.h"
 
 #ifndef PX_DOXYGEN
 namespace physx

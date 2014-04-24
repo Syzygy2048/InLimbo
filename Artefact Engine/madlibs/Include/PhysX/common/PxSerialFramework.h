@@ -35,9 +35,9 @@
 @{
 */
 
-#include "common/PxPhysXCommonConfig.h"
-#include "common/PxTypeInfo.h"
-#include "foundation/PxFlags.h"
+#include "PhysX/common/PxPhysXCommonConfig.h"
+#include "PhysX/common/PxTypeInfo.h"
+#include "PhysX/foundation/PxFlags.h"
 
 #ifndef PX_DOXYGEN
 namespace physx

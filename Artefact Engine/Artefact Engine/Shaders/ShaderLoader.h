@@ -12,7 +12,7 @@ class ShaderLoader
 {
 public:
 
-	GLuint loadShaderArray(std::vector<std::string> shaderPaths);
+	//GLuint loadShaderArray(std::vector<std::string> shaderPaths);
 	
 	Shader* loadShader(std::string, Shader::ShaderType type);
 	ShaderProgram* getShaderProgram(std::string shaderProgramIdentifier);

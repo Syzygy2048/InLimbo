@@ -84,7 +84,7 @@ Shader* ShaderLoader::loadShader(std::string path, Shader::ShaderType type)
 	return shader;
 }
 
-GLuint ShaderLoader::loadShaderArray(std::vector<std::string> shaderPaths)
+/*GLuint ShaderLoader::loadShaderArray(std::vector<std::string> shaderPaths)
 {
 	GLuint programID = glCreateProgram();
 
@@ -137,7 +137,7 @@ GLuint ShaderLoader::loadShaderArray(std::vector<std::string> shaderPaths)
 	//glGetProgramInfoLog(programID, logLength, NULL, &programErrorMessage[0]);
 	//fprintf(stdout, "%s\n", &programErrorMessage[0]);
 	return programID;
-}
+} */
 
 ShaderLoader::~ShaderLoader()
 {

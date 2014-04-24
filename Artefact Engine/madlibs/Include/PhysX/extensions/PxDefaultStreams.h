@@ -35,14 +35,14 @@
 */
 
 #include <stdio.h>
-#include "common/PxPhysXCommonConfig.h"
-#include "common/PxIO.h"
-#include "foundation/PxFoundation.h"
+#include "PhysX/common/PxPhysXCommonConfig.h"
+#include "PhysX/common/PxIO.h"
+#include "PhysX/foundation/PxFoundation.h"
 
 #ifndef PX_WIIU
 	typedef FILE* PxFileHandle;
 #else
-	#include "extensions/wiiu/PxWiiUFileHandle.h"
+	#include "PhysX/extensions/wiiu/PxWiiUFileHandle.h"
 #endif
 
 #ifndef PX_DOXYGEN

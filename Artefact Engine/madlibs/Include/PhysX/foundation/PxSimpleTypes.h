@@ -39,8 +39,8 @@
 // Platform specific types:
 //Design note: Its OK to use int for general loop variables and temps.
 
-#include "foundation/PxPreprocessor.h"
-#include "foundation/Px.h"
+#include "PhysX/foundation/PxPreprocessor.h"
+#include "PhysX/foundation/Px.h"
 #ifndef PX_DOXYGEN
 namespace physx
 {

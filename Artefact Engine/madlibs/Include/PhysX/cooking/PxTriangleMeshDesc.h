@@ -34,8 +34,8 @@
 @{
 */
 
-#include "PxPhysXConfig.h"
-#include "geometry/PxSimpleTriangleMesh.h"
+#include "PhysX/PxPhysXConfig.h"
+#include "PhysX/geometry/PxSimpleTriangleMesh.h"
 
 #ifndef PX_DOXYGEN
 namespace physx

@@ -34,7 +34,7 @@
 @{
 */
 
-#include "foundation/PxAssert.h"
+#include "PhysX/foundation/PxAssert.h"
 
 #ifndef PX_DOXYGEN
 namespace physx

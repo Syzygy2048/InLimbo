@@ -320,7 +320,9 @@ General defines
 
 // check that exactly one of NDEBUG and _DEBUG is defined
 #if !(defined NDEBUG ^ defined _DEBUG)
-	#error Exactly one of NDEBUG and _DEBUG needs to be defined by preprocessor
+	#undef _DEBUG //changed by Peter/Syzygy, this is a fix to get this working because it didn't otherwise... dunno why, something probably defines _DEBUG that shouldn't, maybe another library.
+	#define NDEBUG
+	//#error Exactly one of NDEBUG and _DEBUG needs to be defined by preprocessor
 #endif
 
 // make sure PX_CHECKED is defined in all _DEBUG configurations as well

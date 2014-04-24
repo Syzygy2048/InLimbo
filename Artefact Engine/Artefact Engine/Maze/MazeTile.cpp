@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <glm\glm.hpp>
 
+#include <PxToolkit\PxToolkit.h>
+
 #include "MazeTile.h"
 #include "MazeGenerator.h"
 #include "../Enums/MazeEnums.h"
@@ -25,26 +27,45 @@ void MazeTile::mergeAsMesh()
 {
 	//put the maze mesh together
 	aiMesh* mesh = AssetLoader::getInstance()->getMesh(CUBE)->mMeshes[0];
+	aiMesh* floorMesh = AssetLoader::getInstance()->getMesh(FLOOR)->mMeshes[0];
 	for (int i = 0; i < TILE_SIZE; i++)
 	{
 		for (int j = 0; j < TILE_SIZE; j++)
 		{
+			unsigned int index = vertices.size();
 			if (tile[j + i * TILE_SIZE] == MAZE_WALL)
 			{
-				unsigned int index = vertices.size();
+				
 				for (int k = 0; k < mesh->mNumVertices; k++)
 				{
 					vertices.push_back(
 						glm::vec3(
-						mesh->mVertices[k].x - TILE_SIZE / 2 + j*2,
+						mesh->mVertices[k].x - TILE_SIZE / 2 + j *2,
 						mesh->mVertices[k].y,
-						mesh->mVertices[k].z - TILE_SIZE / 2 + i*2));
+						mesh->mVertices[k].z - TILE_SIZE / 2 + i *2));
 				}
 				for (int k = 0; k < mesh->mNumFaces; k++)
 				{
 					faces.push_back(mesh->mFaces[k].mIndices[0] + index);
 					faces.push_back(mesh->mFaces[k].mIndices[1] + index);
 					faces.push_back(mesh->mFaces[k].mIndices[2] + index);
+				}
+			}
+			else if (tile[j + i * TILE_SIZE] == MAZE_HALLWAY || tile[j + i * TILE_SIZE] == REMOVED_BLOCK)
+			{
+				for (int k = 0; k < floorMesh->mNumVertices; k++)
+				{
+					vertices.push_back(
+						glm::vec3(
+						floorMesh->mVertices[k].x - TILE_SIZE / 2 + j * 2,
+						floorMesh->mVertices[k].y,
+						floorMesh->mVertices[k].z - TILE_SIZE / 2 + i * 2));
+				}
+				for (int k = 0; k < floorMesh->mNumFaces; k++)
+				{
+					faces.push_back(floorMesh->mFaces[k].mIndices[0] + index);
+					faces.push_back(floorMesh->mFaces[k].mIndices[1] + index);
+					faces.push_back(floorMesh->mFaces[k].mIndices[2] + index);
 				}
 			}
 		}
@@ -168,6 +189,28 @@ void MazeTile::bind()
 	glBindVertexArray(0);
 }
 
+void MazeTile::createCollisionShape(physx::PxScene* scene, physx::PxPhysics* physicsSDK, physx::PxCooking* cooking)
+{
+	physx::PxRigidStatic* meshActor = physicsSDK->createRigidStatic(physx::PxTransform());
+	physx::PxTriangleMeshDesc meshDesc;
+	meshDesc.points.count = vertices.size();
+	meshDesc.points.stride = sizeof(glm::vec3);
+	meshDesc.points.data = vertices.data();
+
+	meshDesc.triangles.count = faces.size();
+	meshDesc.triangles.stride = 3*sizeof(unsigned int);
+	meshDesc.triangles.data = faces.data();
+
+	//PxToolkit::createTriangleMesh32(physicsSDK, cooking, &meshDesc);
+	PxToolkit::PxDefaultMemoryOutputStream writeBuffer;
+	cooking->cookTriangleMesh(meshDesc, writeBuffer);
+	PxToolkit::PxDefaultMemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
+	physx::PxTriangleMesh* triangleMesh = physicsSDK->createTriangleMesh(readBuffer);
+	physx::PxShape* triangleMeshShape = meshActor->createShape(physx::PxTriangleMeshGeometry(triangleMesh), *physicsSDK->createMaterial(0.5f, 0.5f, 0.1f), physx::PxShapeFlag::eSCENE_QUERY_SHAPE);
+	scene->addActor(*meshActor);	//create shape creates and adds the shape to the actor, so it does not have to be bound again;
+}
+
+
 void MazeTile::update(double dT, InputHandler* input)
 {
 	SceneNode::update(dT, input);
@@ -175,7 +218,7 @@ void MazeTile::update(double dT, InputHandler* input)
 
 void MazeTile::draw(glm::mat4 vp)
 {
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	SceneNode::draw(vp);
 	mvp = vp * modelMatrix;
 	glUseProgram(shaderProgram);
