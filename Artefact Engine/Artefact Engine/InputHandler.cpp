@@ -7,6 +7,7 @@
 InputHandler::InputHandler(GLFWwindow* w)
 {
 	window = w;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	//mouseWheel = 0;
 
 	//oldMouseWheel = 0;
@@ -56,6 +57,9 @@ void InputHandler::pollMouse()
 	mLeftClick = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 	mRightClick = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 	//mMiddleClick = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
+
+	
+	//glfwSetCursorPos(window, 640, 360);
 
 
 }

@@ -10,13 +10,14 @@ public:
 	CameraNode();
 	~CameraNode();
 
+	void moveForward(float dist);
+	void moveSideward(float dist);
+	void rotate(float rotateX, float rotateY);
 
-	bool isActiveCamera();
 	//void set
-	glm::mat4 getViewMatrix(){ return viewMatrix; }
-
+	glm::mat4 getViewMatrix();
 private:
-	glm::mat4 viewMatrix;
-	bool isActive = false;
+	glm::vec3 cameraPosition;
+	glm::vec3 lookAtTarget;
 };
 

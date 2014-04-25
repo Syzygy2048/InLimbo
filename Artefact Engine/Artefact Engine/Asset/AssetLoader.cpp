@@ -80,7 +80,7 @@ void AssetLoader::loadTexture(std::string identifyer)
 	
 	try
 	{
-		FREE_IMAGE_FORMAT format = FreeImage_GetFileType(identifyer.c_str(), 0); //detection of format
+		FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(identifyer.c_str()); //detection of format
 
 		std::cerr << "format: " << format << std::endl;
 		//image = FreeImage_Load(format, texturePath);

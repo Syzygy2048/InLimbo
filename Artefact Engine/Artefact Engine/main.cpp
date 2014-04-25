@@ -155,19 +155,23 @@ int main(){
 
 
 	//init camera and projection matrix
-	glm::mat4 projection = glm::perspective((float)90, (float)resX / (float)resY, 0.1f, 100.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
+	glm::mat4 projection = glm::perspective((float)80, (float)resX / (float)resY, 0.1f, 100.0f); //FoV, aspect ratio, near clipping plane distance 0.1, far clipping plane distance 100
 	glm::mat4 vp;
 
-	CameraNode* camera = new CameraNode();
+	CameraNode* activeCamera;				//this decides which VP matrix is used, if you want to switch cameras just set the new camera as the active camera
+	CameraNode* freeCamera = new CameraNode();
+	CameraNode* playerCamera = new CameraNode();
+
+	
 	
 	//init scenegraph
 	SceneNode sceneGraph(ROOT);
-	sceneGraph.addNode(camera);
 	sceneGraph.addNode(cowMesh);
 	sceneGraph.addNode(duckMesh);
 	sceneGraph.addNode(&startTile);
+	sceneGraph.addNode(playerCamera);
 	
-	
+	activeCamera = freeCamera;
 	
 	
 	
@@ -205,12 +209,27 @@ int main(){
 			oldTime = newTime;
 
 			input.handleInput();
+			if (input.w)
+			{
+				activeCamera->moveForward(0.5f);
+			}
+			if (input.s){
+				activeCamera->moveForward(-0.5f);
+			}
+			if (input.a){
+				activeCamera->moveSideward(0.5f);
+			}
+			if (input.d){
+				activeCamera->moveSideward(-0.5f);
+			}
+			activeCamera->rotate(input.mPosX - input.oldMousePos.x, input.mPosY - input.oldMousePos.y);
+				
 
 			sceneGraph.update(dT, &input);
 			gScene->simulate(gTimeStep);
 			gScene->fetchResults(true);
 			//physx::PxU32 collisionFlags = characterController->move()
-			sceneGraph.draw(projection * camera->getViewMatrix());
+			sceneGraph.draw(projection * activeCamera->getViewMatrix());
 
 			glfwSwapBuffers(window); //actually renders the frame
 			glfwPollEvents();

@@ -162,7 +162,7 @@ void MeshNode::update(double dT, InputHandler* input)
 
 void MeshNode::draw(glm::mat4 vp)
 {
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 	SceneNode::draw(vp);
 	mvp = vp * modelMatrix;
 
