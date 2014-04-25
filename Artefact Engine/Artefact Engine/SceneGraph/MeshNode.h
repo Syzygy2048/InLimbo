@@ -40,7 +40,7 @@ private:
 	GLuint nbo; //normals
 	std::vector<float> normals;
 	GLuint uvbo; //UV coordinates
-	std::vector<unsigned int> uvs;
+	std::vector<glm::vec2> uvs;
 	GLuint wbo; //weights
 	std::vector<float> weights;
 	GLuint cbo; //color

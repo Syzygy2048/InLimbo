@@ -78,13 +78,22 @@ void AssetLoader::loadTexture(std::string identifyer)
 	{
 		FREE_IMAGE_FORMAT format = FreeImage_GetFileType(identifyer.c_str(), 0); //detection of format
 
-		image = FreeImage_Load(format, texturePath);
+		std::cerr << "format: " << format << std::endl;
+		//image = FreeImage_Load(format, texturePath);
+		image = FreeImage_Load(FIF_PNG, texturePath);		//TODO: probably a bad idea to hardcode .png as the filetype of the texture file here.
 		image = FreeImage_ConvertTo32Bits(image);
 
 	}
 	catch (int e)
 	{
 		std::cerr << "Couldn't load Texture: " << texturePath << e << std::endl;
+		system("PAUSE");
+		exit(-1);
+	}
+
+	if (!image)
+	{
+		std::cerr << "Couldn't load Texture: " << texturePath << std::endl;
 		system("PAUSE");
 		exit(-1);
 	}

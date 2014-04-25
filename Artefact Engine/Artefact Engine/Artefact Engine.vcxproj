@@ -87,7 +87,6 @@
     <ClCompile Include="Shaders\ShaderProgram.cpp" />
     <ClCompile Include="Shaders\Shader.cpp" />
     <ClCompile Include="Shaders\ShaderLoader.cpp" />
-    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asset\AssetLoader.h" />
@@ -104,7 +103,6 @@
     <ClInclude Include="Shaders\ShaderProgram.h" />
     <ClInclude Include="Shaders\Shader.h" />
     <ClInclude Include="Shaders\ShaderLoader.h" />
-    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Asset\Models\duck.dae" />

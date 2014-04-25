@@ -42,7 +42,10 @@ void MeshNode::initializeMeshNode(std::string identifyer)
 	aiMesh* mesh = AssetLoader::getInstance()->getMesh(identifyer)->mMeshes[0];
 	for (unsigned int j = 0; j < mesh-> mNumFaces; ++j)
 	{
-		vertices.push_back(glm::vec3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z));
+		vertices.push_back(glm::vec3(
+			mesh->mVertices[j].x,
+			mesh->mVertices[j].y,
+			mesh->mVertices[j].z));
 	}
 
 	for (unsigned int j = 0; j < mesh->mNumFaces; ++j)
@@ -54,8 +57,17 @@ void MeshNode::initializeMeshNode(std::string identifyer)
 			faces.push_back(mesh->mFaces[j].mIndices[2]);
 		}
 	}
+	for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
+	{
+		uvs.push_back(glm::vec2(
+			mesh->mTextureCoords[0][i].x,
+			mesh->mTextureCoords[0][i].y));
+		//uvs.push_back(mesh->mTextureCoords[0][i].x);
+		//uvs.push_back(mesh->mTextureCoords[0][i].y);
+	}
+
 	
-	shaderProgram = ShaderLoader::getInstance()->getShaderProgram("defaultShader")->getShaderId();	//shader type should come from the aiScenes material instead
+	shaderProgram = ShaderLoader::getInstance()->getShaderProgram("textureShader")->getShaderId();	//shader type should come from the aiScenes material instead
 	mvpLocation = glGetUniformLocation(shaderProgram, "MVP");		//identify data location on shader
 	
 	texture = AssetLoader::getInstance()->getTexture(identifyer);
@@ -84,19 +96,31 @@ void MeshNode::bind()
 
 	glGenBuffers(1, &ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)* faces.size(), faces.data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * faces.size(), faces.data(), GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	/*glGenBuffers(1, &nbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nbo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float)* faces.size(), faces.data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); */
+	
+	
+	
 	
 	glGenBuffers(1, &uvbo);
 	glBindBuffer(GL_ARRAY_BUFFER, uvbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(unsigned int)* vertices.size(), faces.data(), GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0); */
-
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * uvs.size(), uvs.data(), GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(unsigned int) * uvs.size(), uvs.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(
+		1,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void*)0
+		);
+	
 	glGenTextures(1, &texbo);
 	glBindTexture(GL_TEXTURE_2D, texbo);
 	glActiveTexture(GL_TEXTURE0); // this lets you set several textures per mesh, up to at least 80. it's also used for normal maps, reflection maps etc
@@ -111,7 +135,7 @@ void MeshNode::bind()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	glGenerateMipmap(GL_TEXTURE_2D); 
 
 
 
@@ -150,8 +174,7 @@ void MeshNode::draw(glm::mat4 vp)
 
 
 	glBindVertexArray(vao);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glDrawElements(GL_TRIANGLES, faces.size()/3, GL_UNSIGNED_INT, (void*)0);
+	glDrawElements(GL_TRIANGLES, faces.size(), GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(0);
 
 }

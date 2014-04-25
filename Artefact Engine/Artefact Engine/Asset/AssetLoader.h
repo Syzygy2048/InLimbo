@@ -8,7 +8,6 @@
 #include <assimp/Importer.hpp>		// C++ importer interface
 #include <assimp/scene.h>			// Output data structure
 #include <assimp/postprocess.h>		// Post processing flags
-#include "../Texture.h"
 //Hack
 #include <assimp/cimport.h>
 
@@ -21,7 +20,6 @@ public:
 		
 	static AssetLoader* getInstance();
 	~AssetLoader();
-	Texture* texture;
 
 private:
 	AssetLoader();

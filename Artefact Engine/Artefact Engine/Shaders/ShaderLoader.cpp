@@ -19,6 +19,19 @@ ShaderLoader::ShaderLoader()
 	shaderProgram->setFragmentShader(shaders.find("Shaders//Fragment//simple_fragment_shader.glsl")->second);
 	shaderProgram->buildProgram();
 	shaderPrograms.insert(std::pair<std::string, ShaderProgram*>("defaultShader", shaderProgram));
+
+
+
+	path = "Shaders//Vertex//texture_vertex_shader.glsl";
+	loadShader(path, Shader::ShaderType::VERTEX);
+	path = "Shaders//Fragment//texture_fragment_shader.glsl";
+	loadShader(path, Shader::ShaderType::FRAGMENT);
+
+	shaderProgram = new ShaderProgram();
+	shaderProgram->setVertexShader(shaders.find("Shaders//Vertex//texture_vertex_shader.glsl")->second);
+	shaderProgram->setFragmentShader(shaders.find("Shaders//Fragment//texture_fragment_shader.glsl")->second);
+	shaderProgram->buildProgram();
+	shaderPrograms.insert(std::pair<std::string, ShaderProgram*>("textureShader", shaderProgram));
 }
 
 
