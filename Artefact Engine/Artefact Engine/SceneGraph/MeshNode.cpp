@@ -40,24 +40,24 @@ MeshNode::MeshNode(glm::vec3 startPos) : SceneNode(NodeType::MESH), path(path)
 void MeshNode::initializeMeshNode(std::string identifyer)
 {
 	aiMesh* mesh = AssetLoader::getInstance()->getMesh(identifyer)->mMeshes[0];
-	for (unsigned int j = 0; j < mesh-> mNumFaces; ++j)
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		vertices.push_back(glm::vec3(
-			mesh->mVertices[j].x,
-			mesh->mVertices[j].y,
-			mesh->mVertices[j].z));
+			mesh->mVertices[i].x,
+			mesh->mVertices[i].y,
+			mesh->mVertices[i].z));
 	}
 
-	for (unsigned int j = 0; j < mesh->mNumFaces; ++j)
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
-		if (mesh->mFaces[j].mNumIndices == 3) 
+		if (mesh->mFaces[i].mNumIndices == 3) 
 		{
-			faces.push_back(mesh->mFaces[j].mIndices[0]);
-			faces.push_back(mesh->mFaces[j].mIndices[1]);
-			faces.push_back(mesh->mFaces[j].mIndices[2]);
+			faces.push_back(mesh->mFaces[i].mIndices[0]);
+			faces.push_back(mesh->mFaces[i].mIndices[1]);
+			faces.push_back(mesh->mFaces[i].mIndices[2]);
 		}
 	}
-	for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		uvs.push_back(glm::vec2(
 			mesh->mTextureCoords[0][i].x,
