@@ -4,29 +4,25 @@
 #include <glm\glm.hpp>
 #include <FreeImage\FreeImage.h>
 #include <vector>
+#include <PhysX\PxPhysicsAPI.h>
 
 
 class MeshNode : public SceneNode
 {
 public:
 	MeshNode(glm::vec3 startPos);
-	MeshNode(MeshNode* meshNode, glm::vec3 startPos);
-
 	~MeshNode();
 
 	void update(double dT, InputHandler* input);
 	void draw(glm::mat4 vp);
-	
-	/*void setVao(GLuint v){ vao = v; }
-	void setUvBuffer(GLuint vbo){ uvbo = vbo; }
-	void setVertexBuffer(GLuint vbo){ this->vbo = vbo; }
-	void setNormBuffer(GLuint vbo){ nbo = vbo; }
-	void setWeightBuffer(GLuint vbo){ wbo = vbo; }
-	void setIndexBuffer(GLuint vbo){ ibo = vbo; }
-	void setNumberOfFaces(int numOfFaces) { numberOfFaces = numOfFaces; } */
-	void initializeMeshNode(std::string identifyer);
+
+	void initializeMeshNode(std::string identifyer, physx::PxScene* physicsScene, physx::PxPhysics* physicsSDK);
 	void bind();
 	
+	void DrawShape(NxShape* shape)
+
+	void setTransform(physx::PxTransform transform);
+
 
 private:
 	std::string path;

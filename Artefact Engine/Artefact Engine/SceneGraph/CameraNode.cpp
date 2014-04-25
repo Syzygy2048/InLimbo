@@ -16,7 +16,6 @@ void CameraNode::moveForward(float dist)
 }
 void CameraNode::moveSideward(float dist)
 {
-
 	glm::vec3 cross = glm::normalize(glm::cross(glm::vec3(0, 1, 0), lookAtTarget - cameraPosition));
 	cameraPosition += cross * (dist / 100);
 	lookAtTarget += cross * (dist / 100);
@@ -29,17 +28,26 @@ void CameraNode::rotate(float rotateX, float rotateY)
 	
 	float r = sqrt(delta.x * delta.x + delta.z * delta.z);
 
+	
 	float alpha = atan2(delta.z, delta.x);
-
+	
 	alpha += rotateX/300;
+
+
 
 	lookAtTarget.x = cameraPosition.x + r * cos(alpha);
 	lookAtTarget.z = cameraPosition.z + r * sin(alpha);
+	
+	/*
+	float r2 = sqrt(delta.y * delta.y + delta.z*delta.z);
+	float beta = atan2(delta.y, delta.z);
+	beta += rotateY / 300;
 
-	//reset mouse position
-	//std::cerr << rotateX << " " << rotateY << " " << delta.x << " " << delta.y << " " << delta.z << " " << r << " " << alpha << " " << cos(alpha) << " " << sin(alpha) << std::endl;
-	//lookAtTarget.x = cameraPosition.x + r * cos(alpha);
-	//lookAtTarget.z = cameraPosition.z + r * sin(alpha);
+	lookAtTarget.y = cameraPosition.y + r2 * cos(beta);
+	lookAtTarget.z = cameraPosition.z + r2 * sin(beta);
+	*/
+
+
 }
  
 glm::mat4 CameraNode::getViewMatrix()

@@ -41,14 +41,14 @@
 
 
 
-static physx::PxPhysics* gPhysicsSDK = NULL;
-static physx::PxFoundation* gFoundation = NULL;
-static physx::PxDefaultErrorCallback gDefaultErrorCallback;
-static physx::PxDefaultAllocator gDefaultAllocatorCallback;
+static physx::PxPhysics* physicsSDK = NULL;
+static physx::PxFoundation* physicsFoundation = NULL;
+static physx::PxDefaultErrorCallback defaultErrorCallback;
+static physx::PxDefaultAllocator defaultAllocatorCallback;
 
-physx::PxScene* gScene = NULL;
-physx::PxReal gTimeStep = 1.f / 60.f;
-physx::PxRigidDynamic*	gBox = NULL;
+physx::PxScene* physicsScene = NULL;
+physx::PxReal physicsTimeStep = 1.f / 60.f;
+physx::PxRigidDynamic*	rigidDynamics = NULL;
 
 
 
@@ -87,27 +87,27 @@ int main(){
 	FreeImage_Initialise(TRUE);
 
 	//init physics
-	gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
-	gPhysicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, physx::PxTolerancesScale());
-	if (gPhysicsSDK == NULL)
+	physicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, defaultAllocatorCallback, defaultErrorCallback);
+	physicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxTolerancesScale());
+	if (physicsSDK == NULL)
 	{
 		std::cerr << "Error initializing PhysX3" << std::endl;
 		return -1;
 	}
-	physx::PxCooking* cooking = PxCreateCooking(PX_PHYSICS_VERSION, *gFoundation, physx::PxCookingParams(physx::PxTolerancesScale()));
+	physx::PxCooking* cooking = PxCreateCooking(PX_PHYSICS_VERSION, *physicsFoundation, physx::PxCookingParams(physx::PxTolerancesScale()));
 	if (cooking == NULL)
 	{
 		std::cerr << "Error initializing PhysX3 cooking" << std::endl;
 		return -1;
 	}
 
-	physx::PxSceneDesc sceneDesc(gPhysicsSDK->getTolerancesScale());
+	physx::PxSceneDesc sceneDesc(physicsSDK->getTolerancesScale());
 
 	sceneDesc.gravity = physx::PxVec3(0.0f, -9.8f, 0.0f);
 	sceneDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(1);
 	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 
-	gScene = gPhysicsSDK->createScene(sceneDesc);
+	physicsScene = physicsSDK->createScene(sceneDesc);
 
 	/* //init geometry
 		//1-Creating static plane	 
@@ -123,23 +123,28 @@ int main(){
 	gBox = PxCreateDynamic(*gPhysicsSDK, boxPos, boxGeometry, *material, 1.0f);		//Creating rigid static actor
 	gScene->addActor(*gBox);		
 	*/
+	physx::PxTransform duckPos(0, 2, 0);
+	physx::PxBoxGeometry duckGeometry(physx::PxVec3(2, 2, 2));
+	rigidDynamics = physx::PxCreateDynamic(*physicsSDK, duckPos, duckGeometry, *physicsSDK->createMaterial(0.5f, 0.5f, 0.1f), 1.0f);
+	physicsScene->addActor(*rigidDynamics);
+
 	glm::vec3 startinPos;
 	MeshNode* duckMesh = new MeshNode(glm::vec3(0, 2, 0));
-	duckMesh->initializeMeshNode(DUCK);
+	duckMesh->initializeMeshNode(DUCK, physicsScene, physicsSDK);
 	duckMesh->bind();
 
 	MeshNode* cowMesh = new MeshNode(glm::vec3(2.5, 3.7, 2.8));
-	cowMesh->initializeMeshNode(COW);
+	cowMesh->initializeMeshNode(COW, physicsScene, physicsSDK);
 	cowMesh->bind();
 
 	MazeTile startTile;
 	startTile.mergeAsMesh();
-	startTile.createCollisionShape(gScene, gPhysicsSDK, cooking);
+	startTile.createCollisionShape(physicsScene, physicsSDK, cooking);
 	startTile.bind();
 
 
 	//init character controller https://developer.nvidia.com/sites/default/files/akamai/physx/Docs/CharacterControllers.html#character
-	physx::PxControllerManager* manager = PxCreateControllerManager(*gScene);
+	physx::PxControllerManager* manager = PxCreateControllerManager(*physicsScene);
 	physx::PxCapsuleControllerDesc characterControllerDescription;
 	//fill description here
 	characterControllerDescription.position = physx::PxExtendedVec3(0.f, 0.f, 0.f);
@@ -226,19 +231,28 @@ int main(){
 				
 
 			sceneGraph.update(dT, &input);
-			gScene->simulate(gTimeStep);
-			gScene->fetchResults(true);
-			//physx::PxU32 collisionFlags = characterController->move()
-			sceneGraph.draw(projection * activeCamera->getViewMatrix());
+			physicsScene->simulate(physicsTimeStep);
+			physicsScene->fetchResults(TRUE);			
 
+			physx::PxU32 nbActiveTransforms;
+			const physx::PxActiveTransform* activeTransforms = physicsScene->getActiveTransforms(nbActiveTransforms);
+
+			// update each render object with the new transform
+			for (physx::PxU32 i = 0; i < nbActiveTransforms; ++i)
+			{
+				MeshNode* renderObject = static_cast<MeshNode*>(activeTransforms[i].userData);
+				renderObject->setTransform(activeTransforms[i].actor2World);
+			}
+
+			sceneGraph.draw(projection * activeCamera->getViewMatrix());
 			glfwSwapBuffers(window); //actually renders the frame
 			glfwPollEvents();
 		}
 	}
 
 	//unloading
-	gPhysicsSDK->release();
-	gFoundation->release();
+	physicsSDK->release();
+	physicsFoundation->release();
 	glfwTerminate();
 	
 	return 0;

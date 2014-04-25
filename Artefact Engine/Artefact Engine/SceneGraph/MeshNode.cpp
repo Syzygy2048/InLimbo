@@ -4,6 +4,7 @@
 
 #include "MeshNode.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
 
 #include "../Enums/MazeEnums.h"
@@ -14,30 +15,13 @@
 
 #include "../Shaders/ShaderLoader.h"
 
-MeshNode::MeshNode(MeshNode* meshNode, glm::vec3 startPos) : SceneNode(NodeType::MESH), path(path)
-{
-	vao = meshNode->vao;
-	
-	vbo = meshNode->vbo;
-	ibo = meshNode->ibo;
-	nbo = meshNode->nbo;
-	uvbo = meshNode->uvbo;
-	wbo = meshNode->wbo;
-	cbo = meshNode->cbo;
-
-
-	shaderProgram = meshNode->shaderProgram;
-
-	modelMatrix = glm::translate(startPos);
-	mvpLocation = meshNode->mvpLocation;		//mvp identifier for shader
-}
 MeshNode::MeshNode(glm::vec3 startPos) : SceneNode(NodeType::MESH), path(path)
 {
 	modelMatrix = glm::translate(startPos);// glm::mat4(1.f);
 }
 
 
-void MeshNode::initializeMeshNode(std::string identifyer)
+void MeshNode::initializeMeshNode(std::string identifyer, physx::PxScene* physicsScene, physx::PxPhysics* physicsSDK)
 {
 	aiMesh* mesh = AssetLoader::getInstance()->getMesh(identifyer)->mMeshes[0];
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -73,6 +57,12 @@ void MeshNode::initializeMeshNode(std::string identifyer)
 	texture = AssetLoader::getInstance()->getTexture(identifyer);
 	//aiMesh* mesh = AssetLoader::getInstance()->getMesh(DUCK)->mMeshes[0];
 	//Texture texture = AssetLoader::getInstance()->getMesh;
+
+	physx::PxTransform collisionPosition(physx::PxVec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]));												//Position and orientation(transform) for box actor 
+	physx::PxBoxGeometry collisionGeometry(physx::PxVec3(2, 2, 2));											//Defining geometry for box actor
+	physx::PxRigidDynamic* rigidBody = physx::PxCreateDynamic(*physicsSDK, collisionPosition, collisionGeometry, *physicsSDK->createMaterial(0.5f, 0.5f, 0.1f), 1.0f);		//Creating rigid static actor
+	rigidBody->userData = this;
+	physicsScene->addActor(*rigidBody);
 }
 
 void MeshNode::bind()
@@ -154,6 +144,54 @@ void MeshNode::bind()
 }
 
 
+void MeshNode::setTransform(physx::PxTransform transform)
+{
+	glm::vec3 vec = glm::vec3(transform.p.x, transform.p.y, transform.p.z);
+	glm::quat quat = glm::quat(transform.q.x, transform.q.y, transform.q.z, transform.q.w);
+	modelMatrix = glm::translate(modelMatrix, vec);
+	modelMatrix = modelMatrix * glm::mat4_cast(quat);
+}
+
+
+
+void MeshNodeDrawActor(NxActor* actor)
+
+{
+
+	NxShape* const* shapes = actor->getShapes();
+
+	NxU32 nShapes = actor->getNbShapes();
+
+
+
+	while (nShapes--)
+
+	{
+
+		DrawShape(shapes[nShapes]);
+
+	}
+
+}
+void MeshNode::DrawShape(NxShape* shape)
+
+{
+
+	int type = shape->getType();
+
+	switch (type)
+
+	{
+
+	case NX_SHAPE_BOX:
+
+		DrawBox(shape);
+
+		break;
+
+	}
+
+}
 void MeshNode::update(double dT, InputHandler* input)
 {
 	SceneNode::update(dT, input);
