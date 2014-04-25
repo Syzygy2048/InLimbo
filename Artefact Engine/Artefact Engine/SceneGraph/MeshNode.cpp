@@ -77,6 +77,7 @@ void MeshNode::initializeMeshNode(std::string identifyer)
 
 void MeshNode::bind()
 {
+	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
@@ -97,7 +98,7 @@ void MeshNode::bind()
 	glGenBuffers(1, &ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * faces.size(), faces.data(), GL_STATIC_DRAW);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	/*glGenBuffers(1, &nbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nbo);
@@ -136,10 +137,7 @@ void MeshNode::bind()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_2D); 
-
-
-
-
+	//glBindTexture(GL_TEXTURE_2D, 0);
 
 
 
@@ -152,7 +150,7 @@ void MeshNode::bind()
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)* faces.size(), faces.data(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	*/
-
+	
 	glBindVertexArray(0);
 }
 
@@ -165,16 +163,20 @@ void MeshNode::update(double dT, InputHandler* input)
 
 void MeshNode::draw(glm::mat4 vp)
 {
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	SceneNode::draw(vp);
 	mvp = vp * modelMatrix;
 
 	glUseProgram(shaderProgram);
 
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvp[0][0]);		//pass MVP to shader
-
-
+	
 	glBindVertexArray(vao);
+	glBindTexture(GL_TEXTURE_2D, texbo); //TODO: find a way to move this into VAO, if this is missing all meshes that have a texture will use the same texture
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glDrawElements(GL_TRIANGLES, faces.size(), GL_UNSIGNED_INT, (void*)0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0); //TODO: find a way to move this into VAO
 	glBindVertexArray(0);
 
 }

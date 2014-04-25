@@ -184,8 +184,6 @@ void MazeTile::bind()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)* faces.size(), faces.data(), GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
 	glBindVertexArray(0);
 }
 
@@ -227,10 +225,9 @@ void MazeTile::draw(glm::mat4 vp)
 
 
 	glBindVertexArray(vao);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glDrawElements(GL_TRIANGLES, faces.size(), GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(0);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void MazeTile::setNeighbor(MazeTile* neighbor, int relativePosition)

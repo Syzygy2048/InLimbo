@@ -66,6 +66,10 @@ void AssetLoader::loadTexture(std::string identifyer)
 	{
 		 texturePath = DUCK_TEXTURE.c_str();
 	}
+	else if (identifyer == COW)
+	{
+		texturePath = COW_TEXTURE.c_str();
+	}
 	else
 	{
 		texturePath = "texture not yet implemented";

@@ -124,14 +124,18 @@ int main(){
 	gScene->addActor(*gBox);		
 	*/
 	glm::vec3 startinPos;
-	MeshNode* mesh = new MeshNode(startinPos);
-	mesh->initializeMeshNode(DUCK);
-	mesh->bind();
+	MeshNode* duckMesh = new MeshNode(glm::vec3(0, 2, 0));
+	duckMesh->initializeMeshNode(DUCK);
+	duckMesh->bind();
 
-	//MazeTile startTile;
-	//startTile.mergeAsMesh();
-	//artTile.createCollisionShape(gScene, gPhysicsSDK, cooking);
-	//artTile.bind();
+	MeshNode* cowMesh = new MeshNode(glm::vec3(2.5, 3.7, 2.8));
+	cowMesh->initializeMeshNode(COW);
+	cowMesh->bind();
+
+	MazeTile startTile;
+	startTile.mergeAsMesh();
+	startTile.createCollisionShape(gScene, gPhysicsSDK, cooking);
+	startTile.bind();
 
 
 	//init character controller https://developer.nvidia.com/sites/default/files/akamai/physx/Docs/CharacterControllers.html#character
@@ -159,8 +163,9 @@ int main(){
 	//init scenegraph
 	SceneNode sceneGraph(ROOT);
 	sceneGraph.addNode(camera);
-	sceneGraph.addNode(mesh);
-	//sceneGraph.addNode(&startTile);
+	sceneGraph.addNode(cowMesh);
+	sceneGraph.addNode(duckMesh);
+	sceneGraph.addNode(&startTile);
 	
 	
 	
