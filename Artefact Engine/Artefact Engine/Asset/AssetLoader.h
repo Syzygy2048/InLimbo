@@ -17,6 +17,7 @@ class AssetLoader
 {
 public:
 	const aiScene* getMesh(std::string identifier);
+	FIBITMAP* getTexture(std::string identifier);
 		
 	static AssetLoader* getInstance();
 	~AssetLoader();
@@ -28,6 +29,7 @@ private:
 	void operator=(AssetLoader const&);
 
 	std::unordered_map<std::string, const aiScene*> assets;
+	std::unordered_map<std::string, FIBITMAP*> textures;
 	MeshNode* meshNode;
 
 	void loadMesh(std::string identifyer);

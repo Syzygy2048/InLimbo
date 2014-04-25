@@ -16,6 +16,7 @@
 #include "Asset\AssetLoader.h"
 #include "Enums\MazeEnums.h"
 #include "Enums\SceneGraphEnums.h"
+#include "Enums\MeshPaths.h"
 
 
 #include "InputHandler.h"
@@ -82,6 +83,9 @@ int main(){
 	glewInit();
 	glGetError();		//glew is buggy and throws an openGL error no matter what, this handlies that error by ignoring it.
 
+	//initialize texture library
+	FreeImage_Initialise(TRUE);
+
 	//init physics
 	gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
 	gPhysicsSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, physx::PxTolerancesScale());
@@ -121,7 +125,7 @@ int main(){
 	*/
 	glm::vec3 startinPos;
 	MeshNode mesh(startinPos);
-	mesh.loadMesh();
+	mesh.initializeMeshNode(DUCK);
 	mesh.bind();
 
 	MazeTile startTile;

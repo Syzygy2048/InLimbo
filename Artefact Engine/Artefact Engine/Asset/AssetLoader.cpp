@@ -45,37 +45,65 @@ const aiScene* AssetLoader::getMesh(std::string identifier)
 	if (assets.count(identifier) == 0)
 	{
 		loadMesh(identifier);
-		//loadTexture(identifier);
-		assets.find(identifier)->second;
 	}
 	return assets.find(identifier)->second;
 }
 
-void AssetLoader::loadTexture(std::string identifyer)
+FIBITMAP* AssetLoader::getTexture(std::string identifier)
 {
-	
-	texture = new Texture(identifyer);
+	if (textures.count(identifier) == 0)
+	{
+		loadTexture(identifier);
+	}
+	return textures.find(identifier)->second;
 }
 
-
-
-
-/*GLuint AssetLoader::loadTexture(const char* path)
+void AssetLoader::loadTexture(std::string identifyer)
 {
-	GLuint textureId;
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glfwLoadTexture2D(path, 0); //calls glTexImage2D for us
+	const char* texturePath;
 
-	//Trilinear filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	if (identifyer == DUCK)
+	{
+		 texturePath = DUCK_TEXTURE.c_str();
+	}
+	else
+	{
+		texturePath = "texture not yet implemented";
+		//TODO: think of a better system than this, maybe a map that matches each texture to it's texture, maybe store texture path in aiScene if possible
+	}
+	
+	FIBITMAP* image;
+	
+	try
+	{
+		FREE_IMAGE_FORMAT format = FreeImage_GetFileType(identifyer.c_str(), 0); //detection of format
 
-	return textureId; 
-}; */
+		image = FreeImage_Load(format, texturePath);
+		image = FreeImage_ConvertTo32Bits(image);
+
+	}
+	catch (int e)
+	{
+		std::cerr << "Couldn't load Texture: " << texturePath << e << std::endl;
+		system("PAUSE");
+		exit(-1);
+	}
+
+	BYTE *pixels = (BYTE*)FreeImage_GetBits(image);
+	unsigned int width = FreeImage_GetWidth(image);
+	unsigned int height = FreeImage_GetHeight(image);
+
+	// if something went wrong, exit with error
+	if (pixels == NULL || width == 0 || height == 0){
+		std::cerr << "Error loading Texture: " << texturePath 
+			<< "\n width: " << width 
+			<< "\n height" << height
+			<< "\n pixeldata is null: " << (pixels == NULL) << std::endl;
+		system("PAUSE");
+		exit(-1);
+	}
+	textures[identifyer] = image;
+}
 
 
 AssetLoader::~AssetLoader()

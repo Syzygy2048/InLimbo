@@ -62,7 +62,7 @@ Texture::~Texture()
 }
 
 
-void Texture:: Bind(int unit, int textureQuality, int mipmap)
+void Texture:: Bind(int unit, int textureQuality, int mipmap)	//not sure how this is supposed to be used, pretty sure the texture should only be bound once and not every time the level of detail changes, although I might be mistaken, seems like relatively slow changes happen in games all the time (texture popin)
 {
 	glActiveTexture(GL_TEXTURE0 + unit);
 	glBindTexture(GL_TEXTURE_2D, texture);
