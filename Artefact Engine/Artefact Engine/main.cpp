@@ -236,12 +236,12 @@ int main(){
 
 			physx::PxU32 nbActiveTransforms;
 			const physx::PxActiveTransform* activeTransforms = physicsScene->getActiveTransforms(nbActiveTransforms);
-
+				
 			// update each render object with the new transform
 			for (physx::PxU32 i = 0; i < nbActiveTransforms; ++i)
 			{
 				MeshNode* renderObject = static_cast<MeshNode*>(activeTransforms[i].userData);
-				renderObject->setTransform(activeTransforms[i].actor2World);
+		//		renderObject->setTransform(activeTransforms[i].actor2World);
 			}
 
 			sceneGraph.draw(projection * activeCamera->getViewMatrix());

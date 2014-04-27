@@ -18,7 +18,7 @@ MazeTile::MazeTile() : SceneNode(MESH)
 {
 	tile = MazeGenerator(TILE_SIZE).generate();
 
-	shaderProgram = ShaderLoader::getInstance()->getShaderProgram("defaultShader")->getShaderId();
+	shaderProgram = ShaderLoader::getInstance()->getShaderProgram("textureShader")->getShaderId();
 	mvpLocation = glGetUniformLocation(shaderProgram, "MVP");
 }
 
@@ -159,6 +159,12 @@ void MazeTile::mergeAsMesh()
 		}
 	} 
 	std::cerr << "faces after merge " << faces.size() << std::endl; 
+
+	texture = AssetLoader::getInstance()->getTexture(CUBE);
+	for (int i = 0; i < mesh->mNumVertices; i++)
+	{
+		uvCoords.push_back(glm::vec2(mesh->mTextureCoords[0]->x, mesh->mTextureCoords[0]->y));
+	}
 }
 
 void MazeTile::bind()
@@ -184,6 +190,41 @@ void MazeTile::bind()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)* faces.size(), faces.data(), GL_STATIC_DRAW);
 
+
+
+	glGenBuffers(1, &uvbo);
+	glBindBuffer(GL_ARRAY_BUFFER, uvbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * uvCoords.size(), uvCoords.data(), GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(unsigned int) * uvs.size(), uvs.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(
+		1,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void*)0
+		);
+
+	glGenTextures(1, &texbo);
+	glBindTexture(GL_TEXTURE_2D, texbo);
+	glActiveTexture(GL_TEXTURE0); // this lets you set several textures per mesh, up to at least 80. it's also used for normal maps, reflection maps etc
+
+	unsigned int width, height;
+	BYTE* pixels = (BYTE*)FreeImage_GetBits(texture);
+	width = FreeImage_GetWidth(texture);
+	height = FreeImage_GetHeight(texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8/*intensity*/, width, height, 0, GL_BGRA/*luminance!!*/, GL_UNSIGNED_BYTE, pixels);
+	//Trilinear filtering for texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+
+
+
 	glBindVertexArray(0);
 }
 
@@ -206,6 +247,8 @@ void MazeTile::createCollisionShape(physx::PxScene* scene, physx::PxPhysics* phy
 	physx::PxTriangleMesh* triangleMesh = physicsSDK->createTriangleMesh(readBuffer);
 	physx::PxShape* triangleMeshShape = meshActor->createShape(physx::PxTriangleMeshGeometry(triangleMesh), *physicsSDK->createMaterial(0.5f, 0.5f, 0.1f), physx::PxShapeFlag::eSCENE_QUERY_SHAPE);
 	scene->addActor(*meshActor);	//create shape creates and adds the shape to the actor, so it does not have to be bound again;
+
+
 }
 
 
@@ -225,7 +268,9 @@ void MazeTile::draw(glm::mat4 vp)
 
 
 	glBindVertexArray(vao);
+	glBindTexture(GL_TEXTURE_2D, texbo);
 	glDrawElements(GL_TRIANGLES, faces.size(), GL_UNSIGNED_INT, (void*)0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindVertexArray(0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

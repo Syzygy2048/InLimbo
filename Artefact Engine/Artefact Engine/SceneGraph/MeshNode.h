@@ -5,6 +5,7 @@
 #include <FreeImage\FreeImage.h>
 #include <vector>
 #include <PhysX\PxPhysicsAPI.h>
+//#include <NxPhysics
 
 
 class MeshNode : public SceneNode
@@ -19,9 +20,9 @@ public:
 	void initializeMeshNode(std::string identifyer, physx::PxScene* physicsScene, physx::PxPhysics* physicsSDK);
 	void bind();
 	
-	void DrawShape(NxShape* shape)
+	//void DrawShape(NxShape* shape)
 
-	void setTransform(physx::PxTransform transform);
+	//void setTransform(physx::PxTransform transform);
 
 
 private:

@@ -5,6 +5,7 @@
 #include <vector>
 #include "../SceneGraph/SceneNode.h"
 #include "../Enums/SceneGraphEnums.h"
+#include <FreeImage\FreeImage.h>
 
 
 class MazeTile : public SceneNode
@@ -55,6 +56,11 @@ private:
 	std::vector<glm::vec3> vertices;
 	GLuint ibo;
 	std::vector<unsigned int> faces;
+	
+	FIBITMAP* texture;
+	GLuint uvbo;
+	std::vector<glm::vec2> uvCoords;
+	GLuint texbo;
 
 	GLuint shaderProgram;
 	GLuint mvpLocation;

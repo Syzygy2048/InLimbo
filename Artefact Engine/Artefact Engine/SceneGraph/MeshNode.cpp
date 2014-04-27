@@ -144,7 +144,7 @@ void MeshNode::bind()
 }
 
 
-void MeshNode::setTransform(physx::PxTransform transform)
+/*void MeshNode::setTransform(physx::PxTransform transform)
 {
 	glm::vec3 vec = glm::vec3(transform.p.x, transform.p.y, transform.p.z);
 	glm::quat quat = glm::quat(transform.q.x, transform.q.y, transform.q.z, transform.q.w);
@@ -191,7 +191,7 @@ void MeshNode::DrawShape(NxShape* shape)
 
 	}
 
-}
+} */
 void MeshNode::update(double dT, InputHandler* input)
 {
 	SceneNode::update(dT, input);

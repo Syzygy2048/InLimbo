@@ -70,6 +70,10 @@ void AssetLoader::loadTexture(std::string identifyer)
 	{
 		texturePath = COW_TEXTURE.c_str();
 	}
+	else if (identifyer == CUBE)
+	{
+		texturePath = CUBE_TEXTURE.c_str();
+	}
 	else
 	{
 		texturePath = "texture not yet implemented";
