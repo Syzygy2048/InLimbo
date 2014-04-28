@@ -160,11 +160,11 @@ void MazeTile::mergeAsMesh()
 	} 
 	std::cerr << "faces after merge " << faces.size() << std::endl; 
 
-	texture = AssetLoader::getInstance()->getTexture(CUBE);
+	/*texture = AssetLoader::getInstance()->getTexture(CUBE);
 	for (int i = 0; i < mesh->mNumVertices; i++)
 	{
 		uvCoords.push_back(glm::vec2(mesh->mTextureCoords[0]->x, mesh->mTextureCoords[0]->y));
-	}
+	}*/
 }
 
 void MazeTile::bind()

@@ -24,19 +24,30 @@ void CameraNode::moveSideward(float dist)
 
 void CameraNode::rotate(float rotateX, float rotateY)
 {
+	
 	glm::vec3 delta = lookAtTarget - cameraPosition;
 	
-	float r = sqrt(delta.x * delta.x + delta.z * delta.z);
+	float r = sqrt(delta.x * delta.x + delta.z * delta.z+ delta.y * delta.y);
 
 	
-	float alpha = atan2(delta.z, delta.x);
+	float alpha = atan2(delta.z, delta.y); 
+	float beta = atan2(delta.z, delta.x);
 	
-	alpha += rotateX/300;
-
-
-
-	lookAtTarget.x = cameraPosition.x + r * cos(alpha);
-	lookAtTarget.z = cameraPosition.z + r * sin(alpha);
+	alpha += rotateY/300;
+	beta += rotateX/300;
+	
+	if (rotateY > 0)
+	{
+		lookAtTarget.y = cameraPosition.y + r * cos(alpha);
+		lookAtTarget.z = cameraPosition.z + r * sin(alpha);
+	}
+	if (rotateX > 0)
+	{
+		lookAtTarget.x = cameraPosition.x + r * cos(beta);
+		lookAtTarget.z = cameraPosition.z + r * sin(beta);
+	}
+	
+	//lookAtTarget.z = cameraPosition.z + r * sin(alpha);
 	
 	/*
 	float r2 = sqrt(delta.y * delta.y + delta.z*delta.z);
