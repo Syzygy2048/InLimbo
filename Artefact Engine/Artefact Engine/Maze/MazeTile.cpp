@@ -25,6 +25,7 @@ MazeTile::MazeTile() : SceneNode(MESH)
 
 void MazeTile::mergeAsMesh()
 {
+	texture = AssetLoader::getInstance()->getTexture(DUCK);
 	//put the maze mesh together
 	aiMesh* mesh = AssetLoader::getInstance()->getMesh(CUBE)->mMeshes[0];
 	aiMesh* floorMesh = AssetLoader::getInstance()->getMesh(FLOOR)->mMeshes[0];
@@ -50,6 +51,12 @@ void MazeTile::mergeAsMesh()
 					faces.push_back(mesh->mFaces[k].mIndices[1] + index);
 					faces.push_back(mesh->mFaces[k].mIndices[2] + index);
 				}
+				for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+				{
+					uvCoords.push_back(glm::vec2(
+						mesh->mTextureCoords[0][i].x,
+						mesh->mTextureCoords[0][i].y));
+				}
 			}
 			else if (tile[j + i * TILE_SIZE] == MAZE_HALLWAY || tile[j + i * TILE_SIZE] == REMOVED_BLOCK)
 			{
@@ -66,6 +73,12 @@ void MazeTile::mergeAsMesh()
 					faces.push_back(floorMesh->mFaces[k].mIndices[0] + index);
 					faces.push_back(floorMesh->mFaces[k].mIndices[1] + index);
 					faces.push_back(floorMesh->mFaces[k].mIndices[2] + index);
+				}
+				for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+				{
+					uvCoords.push_back(glm::vec2(
+						mesh->mTextureCoords[0][i].x,
+						mesh->mTextureCoords[0][i].y));
 				}
 			}
 		}
@@ -158,13 +171,9 @@ void MazeTile::mergeAsMesh()
 			faces.push_back(verticeId);
 		}
 	} 
-	std::cerr << "faces after merge " << faces.size() << std::endl; 
 
-	/*texture = AssetLoader::getInstance()->getTexture(CUBE);
-	for (int i = 0; i < mesh->mNumVertices; i++)
-	{
-		uvCoords.push_back(glm::vec2(mesh->mTextureCoords[0]->x, mesh->mTextureCoords[0]->y));
-	}*/
+
+	std::cerr << "faces after merge " << faces.size() << std::endl; 
 }
 
 void MazeTile::bind()
